@@ -77,24 +77,23 @@ export default function Home() {
           </div>
 
           {/* Right Column - Image */}
-          <div className="flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[400px] aspect-square overflow-visible">
-              <div className="absolute -right-1.5 sm:-right-2 md:-right-3 -bottom-1.5 sm:-bottom-2 md:-bottom-3 h-full w-full rounded-xl sm:rounded-2xl md:rounded-3xl border-2 sm:border-3 border-black bg-blue-400"></div>
-              <div className="relative h-full w-full overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl border-2 sm:border-3 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <div className="relative h-full w-full">
-                  <Image
-                    src="/love-cat.png"
-                    alt="Cute cat"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    className="object-cover bg-blue-50"
-                  />
-                </div>
+          <div className="flex items-center justify-center">
+            <div className="relative h-[400px] w-[400px] overflow-visible">
+              <div className="absolute -right-3 -bottom-3 h-full w-full rounded-3xl border-3 border-black bg-blue-400"></div>
+              <div className="relative h-full w-full overflow-hidden rounded-3xl border-3 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Image
+                  src="/love-cat.png"
+                  alt="Cute cat"
+                  fill
+                  className="object-cover bg-blue-50"
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <div></div>
     </div>
   );
 }
