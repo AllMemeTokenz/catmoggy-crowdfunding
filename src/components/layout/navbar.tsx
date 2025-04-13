@@ -16,17 +16,29 @@ import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
 
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="w-full border-b-3 border-black bg-white">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b-3 border-black transition-all duration-300",
+        isScrolled ? "bg-white/50 backdrop-blur-sm shadow-md" : "bg-white"
+      )}
+    >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 md:px-6">
-        {/* Logo on the left */}
+        {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image
@@ -48,7 +60,7 @@ export default function Navbar() {
           <span className="sr-only">Toggle menu</span>
         </Button>
 
-        {/* Center navigation - hidden on mobile, visible on desktop */}
+        {/* Center navigation - desktop only */}
         <div className="hidden md:block">
           <NavigationMenu>
             <NavigationMenuList className="space-x-2">
@@ -76,7 +88,7 @@ export default function Navbar() {
           </NavigationMenu>
         </div>
 
-        {/* Right side buttons */}
+        {/* Right buttons */}
         <div className="flex items-center space-x-2">
           <Button className="hidden md:flex md:items-center md:gap-2">
             <Wallet className="h-4 w-4" />
@@ -85,7 +97,7 @@ export default function Navbar() {
           <Button>Login</Button>
         </div>
 
-        {/* Mobile menu, shown/hidden based on menu state */}
+        {/* Mobile menu */}
         {isOpen && (
           <div className="absolute left-0 right-0 top-16 z-50 border-b-4 border-black bg-white p-4 md:hidden">
             <nav className="flex flex-col space-y-2">
