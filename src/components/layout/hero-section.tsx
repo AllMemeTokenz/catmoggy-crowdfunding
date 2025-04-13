@@ -28,7 +28,7 @@ export default function HeroSection() {
             Your support makes a difference in their lives.
           </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex flex-col gap-4 sm:flex-row sm:w-full">
             <Button>
               <Link href="/donation">Donate Now</Link>
             </Button>
