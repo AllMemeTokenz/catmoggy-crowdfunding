@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -23,15 +24,17 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="w-full border-b-4 border-black bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+    <header className="w-full border-b-3 border-black bg-white">
+      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 md:px-6">
         {/* Logo on the left */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <div className="flex h-10 w-10 items-center justify-center rounded-md border-4 border-black bg-blue-400 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              N
-            </div>
-            <span className="ml-2 text-xl font-bold">NeoBrutalism</span>
+            <Image
+              src="/catmoggy-logo.svg"
+              alt="logo"
+              width={180}
+              height={100}
+            />
           </Link>
         </div>
 
@@ -56,18 +59,17 @@ export default function Navbar() {
                 { title: "Contact", href: "/contact" },
               ].map((item) => (
                 <NavigationMenuItem key={item.title}>
-                  <Link href={item.href} legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className={cn(
-                        "px-4 py-2 text-sm transition-colors",
-                        pathname === item.href
-                          ? "font-bold text-blue-500"
-                          : "text-black hover:font-bold hover:text-blue-500"
-                      )}
-                    >
-                      {item.title}
-                    </NavigationMenuLink>
-                  </Link>
+                  <NavigationMenuLink
+                    href={item.href}
+                    className={cn(
+                      "px-4 py-2 text-sm transition-colors",
+                      pathname === item.href
+                        ? "font-bold text-blue-500"
+                        : "text-black hover:font-bold hover:text-blue-500"
+                    )}
+                  >
+                    {item.title}
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
