@@ -8,7 +8,7 @@ import { supportersData } from "@/app/data/site-data"; // Updated import
 
 export default function HeroSection() {
   return (
-    <section className="w-full py-12 md:py-24">
+    <section className="w-full py-10 md:py-24">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 md:px-6 md:grid-cols-2 md:gap-12">
         {/* Left Column - Text Content */}
         <div className="flex flex-col justify-center space-y-6">
@@ -28,7 +28,7 @@ export default function HeroSection() {
             Your support makes a difference in their lives.
           </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:w-full">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <Button>
               <Link href="/donation">Donate Now</Link>
             </Button>
@@ -67,8 +67,8 @@ export default function HeroSection() {
         {/* Right Column - Image */}
         <div className="flex items-center justify-center p-4">
           <div className="relative w-full max-w-[400px] aspect-square overflow-visible">
-            <div className="absolute -right-1.5 sm:-right-2 md:-right-3 -bottom-1.5 sm:-bottom-2 md:-bottom-3 h-full w-full rounded-xl sm:rounded-2xl md:rounded-3xl border-2 sm:border-3 border-black bg-blue-400"></div>
-            <div className="relative h-full w-full overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl border-2 sm:border-3 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div className="absolute -right-2 sm:-right-2 md:-right-3 -bottom-2 sm:-bottom-2 md:-bottom-3 h-full w-full rounded-lg border-2 sm:border-3 border-black bg-blue-400"></div>
+            <div className="relative h-full w-full overflow-hidden rounded-lg border-2 sm:border-3 border-black bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
               <div className="relative h-full w-full">
                 <Image
                   src="/love-cat.png"
