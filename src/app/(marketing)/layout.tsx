@@ -1,6 +1,7 @@
 // app/(marketing)/layout.tsx
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/layout/navbar"; // Navbar khusus untuk marketing
+import Footer from "@/components/layout/footer";
 import "./globals.css"; // Styling khusus marketing
 
 const geistSans = Geist({
@@ -31,6 +32,7 @@ export default function MarketingLayout({
       >
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
