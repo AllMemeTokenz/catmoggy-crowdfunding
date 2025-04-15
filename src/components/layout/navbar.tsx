@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Wallet } from "lucide-react";
+import { Menu, Wallet, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -19,7 +19,10 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  const toggleMenu = () => setIsOpen((prev) => !prev);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +32,29 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Tutup menu jika klik di luar
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isOpen &&
+        menuRef.current &&
+        buttonRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <header
@@ -52,11 +78,12 @@ export default function Navbar() {
 
         {/* Mobile menu button */}
         <Button
+          ref={buttonRef}
           size="icon"
-          className="ml-auto mr-4 block border-2 border-black md:hidden"
+          className="ml-auto mr-4 border-2 border-black md:hidden"
           onClick={toggleMenu}
         >
-          <Menu className="h-5 w-5" />
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           <span className="sr-only">Toggle menu</span>
         </Button>
 
@@ -99,7 +126,10 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="absolute left-0 right-0 top-16 z-50 border-b-4 border-black bg-white p-4 md:hidden">
+          <div
+            ref={menuRef}
+            className="absolute left-0 right-0 top-16 z-50 border-b-4 border-black bg-white p-4 md:hidden"
+          >
             <nav className="flex flex-col space-y-2">
               {[
                 { title: "Home", href: "/" },
