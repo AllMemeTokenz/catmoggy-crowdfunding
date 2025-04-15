@@ -29,12 +29,12 @@ export default function HeroSection() {
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Link href="/donation" className="">
-              <Button className="cursor-pointer">Donate Now</Button>
+            <Link href="/donation" className="block w-fit">
+              <Button className="cw-full cursor-pointer">Donate Now</Button>
             </Link>
 
-            <Link href="/about" className="flex">
-              <Button className="cursor-pointer">
+            <Link href="/about" className="block w-fit">
+              <Button className="w-full cursor-pointer">
                 Learn More
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
