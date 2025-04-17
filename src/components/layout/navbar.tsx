@@ -140,12 +140,17 @@ export default function Navbar() {
                 <Link
                   key={item.title}
                   href={item.href}
-                  className="block rounded-md border-2 border-black bg-white px-4 py-2 font-medium text-black transition-all hover:bg-yellow-300"
+                  className={cn(
+                    "border-b-2 border-black bg-white px-4 py-2 font-medium text-black transition-all",
+                    pathname === item.href
+                      ? "font-bold text-blue-500"
+                      : "text-black hover:font-bold hover:text-blue-500"
+                  )}
                 >
                   {item.title}
                 </Link>
               ))}
-              <Button className="mt-2 w-full border-2 border-black bg-green-400 font-medium text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none">
+              <Button className="mt-2 w-full">
                 <Wallet className="mr-2 h-4 w-4" />
                 <span>Connect Wallet</span>
               </Button>

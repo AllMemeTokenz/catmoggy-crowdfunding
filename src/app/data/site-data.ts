@@ -1,5 +1,7 @@
 import { FaXTwitter } from "react-icons/fa6";
 import { RiTelegram2Fill } from "react-icons/ri";
+import { FaFacebookF } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 
 // Supporters data
 export const supportersData = [
@@ -48,6 +50,16 @@ export const linkSocial = [
     logo: RiTelegram2Fill,
     url: "https://t.me/catsmoggy",
   },
+  {
+    name: "facebook",
+    logo: FaFacebookF,
+    url: "https://www.facebook.com/profile.php?id=61575023983437",
+  },
+  {
+    name: "instagram",
+    logo: FaInstagram,
+    url: "https://www.instagram.com/catmoggy.x/",
+  },
 ];
 
 //
@@ -79,7 +91,8 @@ export const featuredDonations: DonationCardData[] = [
   },
   {
     id: "2",
-    imageUrl: "https://res.cloudinary.com/deeyw3apd/image/upload/v1744702859/3723181_jxbmn8.jpg",
+    imageUrl:
+      "https://res.cloudinary.com/deeyw3apd/image/upload/v1744702859/3723181_jxbmn8.jpg",
     category: "EDUCATION & SCHOOLS",
     title: "New Classroom Building for Rural School",
     description:
@@ -91,7 +104,8 @@ export const featuredDonations: DonationCardData[] = [
   },
   {
     id: "3",
-    imageUrl: "https://res.cloudinary.com/deeyw3apd/image/upload/v1744702860/3744557_awdqfh.jpg",
+    imageUrl:
+      "https://res.cloudinary.com/deeyw3apd/image/upload/v1744702860/3744557_awdqfh.jpg",
     category: "HEALTHCARE",
     title: "Medical Supplies for Community Clinic",
     description:
