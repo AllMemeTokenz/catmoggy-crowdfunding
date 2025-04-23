@@ -1,4 +1,17 @@
-import { pipe, object, string, number, array, minLength, maxLength, optional, enum_, Enum, minValue } from 'valibot';
+import {
+  pipe,
+  object,
+  string,
+  number,
+  // array,
+  minLength,
+  maxLength,
+  // optional,
+  enum_,
+  Enum,
+  minValue,
+  strictObject,
+} from 'valibot';
 
 const currencies = ['catmoggy', 'sol'] as const;
 const currencyEnum = enum_(currencies as unknown as Enum);
@@ -24,7 +37,7 @@ export const commentSchema = object({
   date: string(),
 });
 
-export const projectSchema = object({
+export const projectSchema = strictObject({
   title: pipe(string(), minLength(1, 'Title is required.'), maxLength(100, 'Title must be less than 100 characters.')),
   subTitle: string(),
   statusLabel: string(),
@@ -32,8 +45,8 @@ export const projectSchema = object({
   imageUrl: string(),
   expiredDate: string(),
   targetFunding: pipe(number(), minValue(1, 'Target funding must be greater than 0.')),
-  currentFunding: optional(number()),
+  // currentFunding: optional(number()),
   description: string(),
-  comments: optional(array(commentSchema)),
-  donations: optional(array(donationSchema)),
+  // comments: optional(array(commentSchema)),
+  // donations: optional(array(donationSchema)),
 });
