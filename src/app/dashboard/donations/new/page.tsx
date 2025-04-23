@@ -19,6 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import Image from "next/image";
 
 export default function NewDonation() {
   const router = useRouter();
@@ -55,6 +56,8 @@ export default function NewDonation() {
     router.push("/dashboard/donations");
   };
 
+  const [imgSrc, setImgSrc] = useState(formData.imageUrl || "/placeholder.svg");
+
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -80,14 +83,15 @@ export default function NewDonation() {
             <CardHeader className="relative">
               {formData.imageUrl && (
                 <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
-                  <img
-                    src={formData.imageUrl || "/placeholder.svg"}
+                  <Image
+                    src={imgSrc}
                     alt={formData.title}
+                    width={400}
+                    height={200}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "/placeholder.svg?height=200&width=400";
-                    }}
+                    onError={() =>
+                      setImgSrc("/placeholder.svg?height=200&width=400")
+                    }
                   />
                 </div>
               )}

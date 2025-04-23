@@ -15,7 +15,7 @@ import {
 import { featuredDonations } from "@/app/data/site-data";
 
 export default function DonationsDashboard() {
-  const [donations, setDonations] = useState(featuredDonations);
+  const [donations] = useState(featuredDonations);
 
   return (
     <div className="space-y-6">
