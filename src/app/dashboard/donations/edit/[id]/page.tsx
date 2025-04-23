@@ -47,6 +47,7 @@ export default function EditDonation({
 
   const [previewMode, setPreviewMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [imgSrc, setImgSrc] = useState("/placeholder.svg");
 
   useEffect(() => {
     // Find the donation with the matching ID
@@ -54,6 +55,9 @@ export default function EditDonation({
 
     if (donation) {
       setFormData(donation);
+      if (donation.imageUrl) {
+        setImgSrc(donation.imageUrl);
+      }
     } else {
       // Handle case where donation is not found
       console.error("Donation not found");
@@ -72,6 +76,11 @@ export default function EditDonation({
       ...prev,
       [name]: value,
     }));
+
+    // Update image source when imageUrl changes
+    if (name === "imageUrl" && value) {
+      setImgSrc(value);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -92,10 +101,6 @@ export default function EditDonation({
       </div>
     );
   }
-
-  if (!formData) return <div>Loading...</div>; // Optional: safe check
-
-  const [imgSrc, setImgSrc] = useState(formData.imageUrl || "/placeholder.svg");
 
   return (
     <div className="space-y-6">
@@ -123,7 +128,7 @@ export default function EditDonation({
               {formData.imageUrl && (
                 <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
                   <Image
-                    src={imgSrc}
+                    src={imgSrc || "/placeholder.svg"}
                     alt={formData.title}
                     width={400}
                     height={200}
