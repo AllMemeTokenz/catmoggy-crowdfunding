@@ -8,7 +8,7 @@ import { supportersData } from "@/app/data/site-data"; // Updated import
 
 export default function HeroSection() {
   return (
-    <section className="w-full py-10 md:py-24">
+    <section className="w-full pt-10 md:pt-24">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 md:px-6 md:grid-cols-2 md:gap-12">
         {/* Left Column - Text Content */}
         <div className="flex flex-col justify-center space-y-6">

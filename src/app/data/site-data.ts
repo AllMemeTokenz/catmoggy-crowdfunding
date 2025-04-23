@@ -86,7 +86,7 @@ export const featuredDonations: DonationCardData[] = [
       "World's First 33,000mAh Rugged Smartphone with Built-In Projector",
     raised: "$7,841,506",
     goal: "$901 USD",
-    percentFunded: 10078,
+    percentFunded: 20,
     badgeText: "GOGOPICK",
   },
   {
@@ -99,7 +99,7 @@ export const featuredDonations: DonationCardData[] = [
       "Help us build a new classroom for children in rural areas to access quality education",
     raised: "$75,000",
     goal: "$100,000",
-    percentFunded: 75,
+    percentFunded: 55,
     badgeText: "FEATURED",
   },
   {
@@ -112,7 +112,7 @@ export const featuredDonations: DonationCardData[] = [
       "Providing essential medical supplies to underserved communities",
     raised: "$12,350",
     goal: "$20,000",
-    percentFunded: 62,
+    percentFunded: 82,
     badgeText: "URGENT",
   },
 ];

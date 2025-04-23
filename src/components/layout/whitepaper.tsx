@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export default function WhitepaperSection() {
   return (
-    <section className="w-full py-10 md:pb-24">
+    <section className="w-full pt-10 md:pt-24">
       <div className="w-full mx-auto max-w-7xl space-y-10 flex flex-col items-center justify-center px-6 md:px-16">
         <h1 className="font-bold text-[32px] lg:text-[36px] xl:text-[40px] text-black text-center">
           $CATMOGGY WHITEPAPER

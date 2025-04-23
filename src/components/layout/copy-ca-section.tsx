@@ -21,7 +21,7 @@ export default function TokenCopySection({
   };
 
   return (
-    <section className="w-full py-10 md:py-24">
+    <section className="w-full pt-10 md:pt-24">
       <div className="w-full mx-auto max-w-7xl px-4 md:px-6">
         <div className="flex my-10 w-full flex-col items-center justify-center">
           <h2 className="text-4xl font-bold mb-2 text-center ">$CATMOGGY CA</h2>

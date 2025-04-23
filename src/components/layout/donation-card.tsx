@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import { BookmarkIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { DonationCardData } from "@/app/data/site-data";
+import type { DonationCardData } from "@/app/data/site-data";
 
 export default function DonationCard({
+  id,
   imageUrl,
   category,
   title,
@@ -63,7 +65,9 @@ export default function DonationCard({
         </div>
 
         <div className="pt-2 border-t border-gray-100">
-          <Button className="w-full">Donate Now</Button>
+          <Link href={`/donation/${id}`} className="w-full">
+            <Button className="w-full">Donate Now</Button>
+          </Link>
         </div>
       </div>
     </div>
