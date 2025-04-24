@@ -18,11 +18,13 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
 
 Open http://localhost:3000 with your browser to see the result.
 You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
 
 ## API Documentation
+
 This section provides detailed documentation of the available API endpoints. Click on the links to access the corresponding documentation:
 
 ### Create Funding Project
@@ -87,4 +89,7 @@ You can check out the [Next.js GitHub repository](https://github.com/vercel/next
 ### Notes
 
 If you need further assistance or encounter any issues, please feel free to create an issue or ask for help within the project repo.
+
+```
+
 ```
