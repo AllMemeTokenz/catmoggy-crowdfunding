@@ -19,3 +19,20 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ error: 'Error creating project', detail: (error as Error).message }, { status: 500 });
   }
 };
+
+export const GET = async () => {
+  try {
+    await connectDB();
+
+    const projects = await FundProject.find({
+      deletedAt: null,
+    })
+      .select('-deletedAt -comments -donations -description -__v')
+      .sort({ createdAt: -1 });
+
+    return NextResponse.json({ message: 'Projects fetched successfully', data: projects }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return NextResponse.json({ error: 'Error fetching projects', detail: (error as Error).message }, { status: 500 });
+  }
+};
