@@ -27,7 +27,7 @@ You can start editing the page by modifying app/page.tsx. The page auto-updates 
 
 This section provides detailed documentation of the available API endpoints. Click on the links to access the corresponding documentation:
 
-###[Create Funding Project](./docs/create-funding-project.md)
+### [Create Funding Project](./docs/create-funding-project.md)
 
 **HTTP Method:** POST
 
@@ -37,7 +37,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 ---
 
-[### Delete Funding Project](./docs/delete-funding-project.md)
+### [ Delete Funding Project](./docs/delete-funding-project.md)
 
 **HTTP Method:** PATCH
 
@@ -47,7 +47,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 ---
 
-[### Get All Funding Projects](./docs/get-all-funding-projects.md)
+### [ Get All Funding Projects](./docs/get-all-funding-projects.md)
 
 **HTTP Method:** GET
 
@@ -57,7 +57,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 ---
 
-[### Get Funding Project by ID](./docs/get-funding-project-by-id.md)
+### [ Get Funding Project by ID](./docs/get-funding-project-by-id.md)
 
 **HTTP Method:** GET
 
@@ -67,7 +67,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 ---
 
-[### Update Funding Project](./docs/update-funding-project.md)
+### [ Update Funding Project](./docs/update-funding-project.md)
 
 **HTTP Method:** PATCH
 
