@@ -77,7 +77,4 @@ When the project is successfully created, the response will include a message co
 
 This response will be returned when a new funding project is successfully created.
 
-```
-
 [Back to API Documentation](../README.md#api-documentation)
-```

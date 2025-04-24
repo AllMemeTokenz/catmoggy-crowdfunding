@@ -18,7 +18,7 @@ Retrieve a specific funding project by its ID.
 
 - **Content:**
 
-````json
+```json
 {
   "_id": "680a09f93612abd68eabc5bf",
   "title": "Community Garden Revamp",
@@ -32,10 +32,11 @@ Retrieve a specific funding project by its ID.
   "createdAt": "2025-04-24T09:52:57.088Z",
   "updatedAt": "2025-04-24T09:52:57.088Z"
 }
+```
 
 ### Explanation
 
-- **_id:** The unique ID for the project.
+- **\_id:** The unique ID for the project.
 - **title:** The title of the project.
 - **subTitle:** The subtitle of the project.
 - **statusLabel:** The current status of the project (e.g., Active).
@@ -52,10 +53,13 @@ Retrieve a specific funding project by its ID.
 - **Status Code:** 400 Bad Request
 
 #### Content
+
 ```json
 {
   "error": "Invalid ID"
 }
+```
+
 #### Explanation
 
 - **error**: A message indicating that the provided project ID is not valid.
@@ -65,10 +69,13 @@ Retrieve a specific funding project by its ID.
 
 - **Status Code:** `404 Not Found`
 - **Content:**
+
 ```json
 {
   "error": "Project not found"
 }
+```
+
 #### Explanation
 
 - **error**: A message indicating that no project was found with the provided ID.
@@ -78,14 +85,17 @@ Retrieve a specific funding project by its ID.
 
 - **Status Code**: 500 Internal Server Error
 - **Content**:
+
 ```json
 {
   "error": "Internal server error",
   "detail": "<error_message>"
 }
+```
+
 #### Explanation
+
 - **error**: A generic error message indicating that an unexpected error occurred while processing the request.
 - **detail**: A detailed error message explaining the issue (e.g., stack trace).
 
 [Back to API Documentation](../README.md#api-documentation)
-````

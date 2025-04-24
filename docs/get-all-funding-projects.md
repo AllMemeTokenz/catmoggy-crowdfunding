@@ -13,7 +13,7 @@ Fetch all funding projects in the system.
 - **Status Code**: `200 OK`
 - **Content**:
 
-````json
+```json
 [
   {
     "_id": "680a09f93612abd68eabc5bf",
@@ -42,11 +42,13 @@ Fetch all funding projects in the system.
     "updatedAt": "2025-04-20T09:52:57.088Z"
   }
 ]
+```
 
 #### Explanation:
+
 - **message**: A success message confirming that the funding projects were retrieved successfully.
 - **data**: An array of all the funding projects in the system, where each object contains:
-  - **_id**: The unique ID for the project.
+  - **\_id**: The unique ID for the project.
   - **title**: The title of the project.
   - **subTitle**: The subtitle of the project.
   - **statusLabel**: The current status of the project (e.g., Active).
@@ -67,6 +69,7 @@ Fetch all funding projects in the system.
     "error": "Internal server error",
     "detail": "<error_message>"
   }
+  ```
 
 #### Explanation:
 
@@ -76,4 +79,3 @@ Fetch all funding projects in the system.
 This error will be returned in case of an internal server error.
 
 [Back to API Documentation](../README.md#api-documentation)
-````

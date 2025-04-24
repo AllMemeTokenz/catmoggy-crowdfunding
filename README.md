@@ -89,7 +89,3 @@ You can check out the [Next.js GitHub repository](https://github.com/vercel/next
 ### Notes
 
 If you need further assistance or encounter any issues, please feel free to create an issue or ask for help within the project repo.
-
-```
-
-```
