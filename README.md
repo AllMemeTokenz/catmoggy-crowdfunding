@@ -27,7 +27,7 @@ You can start editing the page by modifying app/page.tsx. The page auto-updates 
 
 This section provides detailed documentation of the available API endpoints. Click on the links to access the corresponding documentation:
 
-[### Create Funding Project](./docs/create-funding-project.md)
+###[Create Funding Project](./docs/create-funding-project.md)
 
 **HTTP Method:** POST
 
