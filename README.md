@@ -1,6 +1,6 @@
 # Project Name
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app``/api-reference/cli/create-next-app).``
 
 ---
 
@@ -33,7 +33,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 **Description:** Create a new funding project.
 
-**Endpoint:** /api/funding-projects
+**Endpoint:** `/api/funding-projects`
 
 ---
 
@@ -43,7 +43,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 **Description:** Soft delete a funding project by its ID.
 
-**Endpoint:** /api/funding-projects/delete/[id]
+**Endpoint:** `/api/funding-projects/delete/[id]`
 
 ---
 
@@ -53,7 +53,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 **Description:** Fetch all funding projects in the system.
 
-**Endpoint:** /api/funding-projects
+**Endpoint:** `/api/funding-projects`
 
 ---
 
@@ -63,7 +63,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 **Description:** Retrieve a specific funding project by its ID.
 
-**Endpoint:** /api/funding-projects/[id]
+**Endpoint:** `/api/funding-projects/[id]`
 
 ---
 
@@ -73,7 +73,7 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 **Description:** Update a funding project by its ID. Only the provided fields will be updated.
 
-**Endpoint:** /api/funding-projects/[id]
+**Endpoint:** `/api/funding-projects/[id]`
 
 ---
 
