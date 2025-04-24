@@ -22,7 +22,7 @@ The request body should contain the following fields:
 
 ### Example Request
 
-````json
+```json
 {
   "title": "Community Garden Revamp",
   "subTitle": "Bringing green spaces back to life",
@@ -32,6 +32,7 @@ The request body should contain the following fields:
   "expiredDate": "2025-07-15T00:00:00.000Z",
   "targetFunding": 15000
 }
+```
 
 ## Success Response
 
@@ -58,9 +59,11 @@ When the project is successfully created, the response will include a message co
     "updatedAt": "2025-04-24T09:52:57.088Z"
   }
 }
+```
+
 - **message**: A success message confirming that the project was created.
 - **data**: The data for the newly created project, including:
-  - **_id**: The unique ID for the project.
+  - **\_id**: The unique ID for the project.
   - **title**: The title of the project.
   - **subTitle**: The subtitle of the project.
   - **statusLabel**: The current status of the project (e.g., Active).
@@ -73,6 +76,8 @@ When the project is successfully created, the response will include a message co
   - **updatedAt**: The timestamp when the project was last updated.
 
 This response will be returned when a new funding project is successfully created.
-````
+
+```
 
 [Back to API Documentation](../README.md#api-documentation)
+```
