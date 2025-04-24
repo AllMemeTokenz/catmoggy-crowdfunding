@@ -27,53 +27,53 @@ You can start editing the page by modifying app/page.tsx. The page auto-updates 
 
 This section provides detailed documentation of the available API endpoints. Click on the links to access the corresponding documentation:
 
-### Create Funding Project
+[### Create Funding Project](./docs/create-funding-project.md)
 
 **HTTP Method:** POST
-**Description:** Create a new funding project.
-**Endpoint:** /api/funding-projects
 
-[Click here for detailed API documentation](./docs/create-funding-project.md)
+**Description:** Create a new funding project.
+
+**Endpoint:** /api/funding-projects
 
 ---
 
-### Delete Funding Project
+[### Delete Funding Project](./docs/delete-funding-project.md)
 
 **HTTP Method:** PATCH
+
 **Description:** Soft delete a funding project by its ID.
+
 **Endpoint:** /api/funding-projects/delete/[id]
 
-[Click here for detailed API documentation](./docs/delete-funding-project.md)
-
 ---
 
-### Get All Funding Projects
+[### Get All Funding Projects](./docs/get-all-funding-projects.md)
 
 **HTTP Method:** GET
+
 **Description:** Fetch all funding projects in the system.
+
 **Endpoint:** /api/funding-projects
 
-[Click here for detailed API documentation](./docs/get-all-funding-projects.md)
-
 ---
 
-### Get Funding Project by ID
+[### Get Funding Project by ID](./docs/get-funding-project-by-id.md)
 
 **HTTP Method:** GET
-**Description:** Retrieve a specific funding project by its ID.
-**Endpoint:** /api/funding-projects/[id]
 
-[Click here for detailed API documentation](./docs/get-funding-project-by-id.md)
+**Description:** Retrieve a specific funding project by its ID.
+
+**Endpoint:** /api/funding-projects/[id]
 
 ---
 
-### Update Funding Project
+[### Update Funding Project](./docs/update-funding-project.md)
 
 **HTTP Method:** PATCH
-**Description:** Update a funding project by its ID. Only the provided fields will be updated.
-**Endpoint:** /api/funding-projects/[id]
 
-[Click here for detailed API documentation](./docs/update-funding-project.md)
+**Description:** Update a funding project by its ID. Only the provided fields will be updated.
+
+**Endpoint:** /api/funding-projects/[id]
 
 ---
 
