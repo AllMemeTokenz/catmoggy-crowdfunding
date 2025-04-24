@@ -37,6 +37,7 @@ const projectSchema = new Schema<IProject>(
     description: { type: String, required: true },
     comments: { type: [commentSchema], default: [] },
     donations: { type: [donationSchema], default: [] },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
