@@ -20,15 +20,27 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function NewDonation() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    id: crypto.randomUUID(),
-    imageUrl: "",
-    category: "",
     title: "",
+    subTitle: "",
+    statusLabel: "Active",
+    category: "",
+    imageUrl: "",
+    expiredDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
+    targetFunding: 0,
     description: "",
+  });
+
+  // For preview display
+  const [previewData, setPreviewData] = useState({
     raised: "$0",
     goal: "$0",
     percentFunded: 0,
@@ -41,22 +53,75 @@ export default function NewDonation() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (name === "targetFunding") {
+      // Convert string to number for targetFunding
+      setFormData((prev) => ({
+        ...prev,
+        [name]: Number.parseFloat(value) || 0,
+      }));
+
+      // Update preview goal
+      setPreviewData((prev) => ({
+        ...prev,
+        goal: `$${value}`,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+
+      // Update preview data for specific fields
+      if (name === "statusLabel") {
+        setPreviewData((prev) => ({
+          ...prev,
+          badgeText: value,
+        }));
+      }
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically save the data to your database
-    console.log("Form submitted:", formData);
+    setLoading(true);
 
-    // Navigate back to the donations dashboard
-    router.push("/dashboard/donations");
+    try {
+      // Send data to the API endpoint
+
+      await axios.post("/api/funding-projects", formData);
+
+      toast.success("Project created successfully");
+
+      // Navigate back to the donations dashboard
+      router.push("/dashboard/donations");
+    } catch (error) {
+      console.error("Error creating project:", error);
+
+      let errorMessage = "Failed to create project";
+      if (axios.isAxiosError(error) && error.response) {
+        errorMessage =
+          error.response.data.detail ||
+          error.response.data.error ||
+          errorMessage;
+      }
+
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [imgSrc, setImgSrc] = useState(formData.imageUrl || "/placeholder.svg");
+  const [imgSrc, setImgSrc] = useState("/placeholder.svg?height=200&width=400");
+
+  // Update image preview when URL changes
+  const updateImagePreview = () => {
+    if (formData.imageUrl) {
+      setImgSrc(formData.imageUrl);
+    } else {
+      setImgSrc("/placeholder.svg?height=200&width=400");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -71,8 +136,13 @@ export default function NewDonation() {
       </div>
 
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Add New Donation</h1>
-        <Button onClick={() => setPreviewMode(!previewMode)}>
+        <h1 className="text-3xl font-bold">Add New Funding Project</h1>
+        <Button
+          onClick={() => {
+            updateImagePreview();
+            setPreviewMode(!previewMode);
+          }}
+        >
           {previewMode ? "Edit Mode" : "Preview Mode"}
         </Button>
       </div>
@@ -81,47 +151,44 @@ export default function NewDonation() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card className="w-full">
             <CardHeader className="relative">
-              {formData.imageUrl && (
-                <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
-                  <Image
-                    src={imgSrc}
-                    alt={formData.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-full object-cover"
-                    onError={() =>
-                      setImgSrc("/placeholder.svg?height=200&width=400")
-                    }
-                  />
-                </div>
-              )}
-              {!formData.imageUrl && (
-                <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2 flex items-center justify-center">
-                  <span className="text-gray-400">No Image Provided</span>
-                </div>
-              )}
-              {formData.badgeText && (
+              <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
+                <Image
+                  src={imgSrc || "/placeholder.svg"}
+                  alt={formData.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover"
+                  onError={() =>
+                    setImgSrc("/placeholder.svg?height=200&width=400")
+                  }
+                />
+              </div>
+              {formData.statusLabel && (
                 <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-md text-sm font-bold">
-                  {formData.badgeText}
+                  {formData.statusLabel}
                 </div>
               )}
-              <CardTitle>{formData.title || "Donation Title"}</CardTitle>
+              <CardTitle>{formData.title || "Project Title"}</CardTitle>
               <CardDescription>
-                {formData.category || "Category"}
+                {formData.category || "Category"} •{" "}
+                {formData.subTitle || "Subtitle"}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-500 mb-4">
-                {formData.description || "Donation description goes here"}
+                {formData.description || "Project description goes here"}
               </p>
               <div className="space-y-2">
-                <Progress value={formData.percentFunded} className="h-2" />
+                <Progress value={previewData.percentFunded} className="h-2" />
                 <div className="flex justify-between text-sm">
-                  <span>{formData.raised}</span>
-                  <span>raised of {formData.goal}</span>
+                  <span>{previewData.raised}</span>
+                  <span>raised of ${formData.targetFunding}</span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  {formData.percentFunded}% funded
+                  {previewData.percentFunded}% funded
+                </div>
+                <div className="text-sm text-gray-500">
+                  Expires: {new Date(formData.expiredDate).toLocaleDateString()}
                 </div>
               </div>
             </CardContent>
@@ -135,19 +202,31 @@ export default function NewDonation() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">Title *</Label>
                 <Input
                   id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="Enter donation title"
+                  placeholder="Enter project title"
                   required
                 />
               </div>
 
               <div>
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="subTitle">Subtitle *</Label>
+                <Input
+                  id="subTitle"
+                  name="subTitle"
+                  value={formData.subTitle}
+                  onChange={handleChange}
+                  placeholder="Enter subtitle"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category *</Label>
                 <Input
                   id="category"
                   name="category"
@@ -159,64 +238,53 @@ export default function NewDonation() {
               </div>
 
               <div>
-                <Label htmlFor="imageUrl">Image URL</Label>
+                <Label htmlFor="imageUrl">Image URL *</Label>
                 <Input
                   id="imageUrl"
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleChange}
                   placeholder="Enter image URL"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="badgeText">Badge Text (Optional)</Label>
-                <Input
-                  id="badgeText"
-                  name="badgeText"
-                  value={formData.badgeText}
-                  onChange={handleChange}
-                  placeholder="E.g., Featured, Urgent, etc."
+                  required
                 />
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <Label htmlFor="raised">Raised Amount</Label>
+                <Label htmlFor="statusLabel">Status Label *</Label>
                 <Input
-                  id="raised"
-                  name="raised"
-                  value={formData.raised}
+                  id="statusLabel"
+                  name="statusLabel"
+                  value={formData.statusLabel}
                   onChange={handleChange}
-                  placeholder="E.g., $1,000"
+                  placeholder="E.g., Active, Urgent, etc."
                   required
                 />
               </div>
 
               <div>
-                <Label htmlFor="goal">Goal Amount</Label>
+                <Label htmlFor="expiredDate">Expiry Date *</Label>
                 <Input
-                  id="goal"
-                  name="goal"
-                  value={formData.goal}
+                  id="expiredDate"
+                  name="expiredDate"
+                  type="date"
+                  value={formData.expiredDate}
                   onChange={handleChange}
-                  placeholder="E.g., $10,000"
                   required
                 />
               </div>
 
               <div>
-                <Label htmlFor="percentFunded">Percent Funded</Label>
+                <Label htmlFor="targetFunding">Target Funding Amount *</Label>
                 <Input
-                  id="percentFunded"
-                  name="percentFunded"
+                  id="targetFunding"
+                  name="targetFunding"
                   type="number"
-                  min="0"
-                  max="100"
-                  value={formData.percentFunded}
+                  min="1"
+                  value={formData.targetFunding}
                   onChange={handleChange}
-                  placeholder="E.g., 25"
+                  placeholder="E.g., 10000"
                   required
                 />
               </div>
@@ -224,23 +292,26 @@ export default function NewDonation() {
           </div>
 
           <div>
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Description *</Label>
             <Textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Enter donation description"
+              placeholder="Enter project description"
               rows={5}
               required
             />
           </div>
 
           <div className="flex gap-4">
-            <Button type="submit">Save Donation</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Saving..." : "Save Project"}
+            </Button>
             <Button
               type="button"
               onClick={() => router.push("/dashboard/donations")}
+              disabled={loading}
             >
               Cancel
             </Button>

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { LayoutDashboard, Heart, Users, Settings, LogOut } from "lucide-react";
 import "./dashboard.css";
+import { Toaster } from "react-hot-toast";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -67,7 +68,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 ml-64 p-6">{children}</main>
+      <main className="flex-1 ml-64 p-6">
+        {children}
+        <Toaster position="top-center" />
+      </main>
     </div>
   );
 }
