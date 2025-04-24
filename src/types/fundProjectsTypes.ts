@@ -27,4 +27,5 @@ export interface IProject extends Document {
   donations: IDonation[];
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date | null;
 }
