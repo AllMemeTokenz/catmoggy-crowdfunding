@@ -12,6 +12,7 @@ export const POST = async (req: Request) => {
     await connectDB();
 
     const newProject = new FundProject(parsedData);
+    console.log('Parsed data:', parsedData);
     await newProject.save();
 
     return NextResponse.json({ message: 'Project created successfully', data: newProject }, { status: 201 });
