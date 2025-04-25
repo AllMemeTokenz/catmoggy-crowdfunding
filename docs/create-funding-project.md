@@ -18,6 +18,7 @@ The request body should contain the following fields:
 | `category`      | `string` | The category of the project (e.g., "Environment", "Health").                                       | Yes      |
 | `imageUrl`      | `string` | URL for the project's image.                                                                       | Yes      |
 | `expiredDate`   | `string` | The expiration date for the funding project in ISO 8601 format (e.g., `2025-07-15T00:00:00.000Z`). | Yes      |
+| `currency`      | `string` | Currency used (catmoggy, sol).                                                                     | Yes      |
 | `targetFunding` | `number` | The target amount of funding for the project.                                                      | Yes      |
 
 ### Example Request

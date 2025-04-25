@@ -34,6 +34,7 @@ The body of the request should contain any of the fields listed below that need 
 | **category**       | The category of the project (e.g., Environment, Technology). | string            |       |
 | **imageUrl**       | The URL of the project image.                                | string            |       |
 | **expiredDate**    | The expiration date of the project (in ISO 8601 format).     | string (ISO 8601) |       |
+| **currency**       | Currency used (catmoggy, sol).                               | string            |       |
 | **targetFunding**  | The target funding amount for the project.                   | number            |       |
 | **currentFunding** | The current funding raised for the project.                  | number            |       |
 
