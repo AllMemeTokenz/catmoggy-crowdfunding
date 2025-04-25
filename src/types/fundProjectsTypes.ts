@@ -20,6 +20,7 @@ export interface IProject extends Document {
   category: string;
   imageUrl: string;
   expiredDate: Date;
+  currency: 'catmoggy' | 'sol';
   targetFunding: number;
   currentFunding: number;
   description: string;

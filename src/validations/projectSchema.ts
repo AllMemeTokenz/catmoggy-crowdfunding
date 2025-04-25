@@ -44,6 +44,7 @@ export const projectSchema = strictObject({
   category: string(),
   imageUrl: string(),
   expiredDate: string(),
+  currency: currencyEnum,
   targetFunding: pipe(number(), minValue(1, 'Target funding must be greater than 0.')),
   // currentFunding: optional(number()),
   description: string(),
