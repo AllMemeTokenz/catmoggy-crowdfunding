@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 export interface IComment {
   user: string;
@@ -9,7 +9,7 @@ export interface IComment {
 export interface IDonation {
   donor: string;
   amount: number;
-  currency: 'catmoggy' | 'sol';
+  currency: "catmoggy" | "sol";
   date: Date;
 }
 

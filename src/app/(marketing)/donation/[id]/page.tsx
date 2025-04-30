@@ -1,13 +1,32 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use } from "react";
 import { ArrowLeft, Share2, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { featuredDonations, type DonationCardData } from "@/app/data/site-data";
+
+// Define the DonationData interface
+interface DonationData {
+  id: string;
+  imageUrl: string;
+  category: string;
+  title: string;
+  description: string;
+  raised: string;
+  percentFunded: number;
+  badgeText?: string;
+  goal?: string;
+}
+
+// Calculate percentage helper function
+const calculatePercentage = (current: number, target: number) => {
+  if (target === 0) return 0;
+  return Math.min(Math.round((current / target) * 100), 100);
+};
 
 export default function DonationDetailPage({
   params,
@@ -18,20 +37,55 @@ export default function DonationDetailPage({
   const unwrappedParams = use(params);
   const { id } = unwrappedParams;
 
-  const [donation, setDonation] = useState<DonationCardData | null>(null);
+  const [donation, setDonation] = useState<DonationData | null>(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Find the donation with the matching ID
-    const foundDonation = featuredDonations.find((d) => d.id === id);
+    const fetchDonationDetails = async () => {
+      try {
+        console.log("Fetching donation with id:", id);
+        // Use absolute URL to avoid issues with relative path
+        const response = await axios.get(
+          `http://localhost:3000/api/funding-projects/${id}`
+        );
 
-    if (foundDonation) {
-      setDonation(foundDonation);
-      setTimeout(() => setProgress(foundDonation.percentFunded), 500);
-    }
+        let donationData = null;
 
-    setLoading(false);
+        if (response.data && typeof response.data === "object") {
+          const item = response.data.data;
+          donationData = {
+            id: item._id || item.id || id,
+            imageUrl: item.imageUrl || "/placeholder.svg",
+            category: item.category || "Uncategorized",
+            title: item.title || "Untitled Donation",
+            description: item.description || "No description available",
+            raised: `$${item.currentFunding || 0}`,
+            percentFunded: calculatePercentage(
+              item.currentFunding || 0,
+              item.targetFunding || 1
+            ),
+            badgeText: item.statusLabel || "ACTIVE",
+            goal: `$${item.targetFunding || 0}`,
+          };
+        }
+
+        if (donationData) {
+          setDonation(donationData);
+          setTimeout(() => setProgress(donationData.percentFunded), 500);
+        } else {
+          setError("Could not find donation details");
+        }
+      } catch (err) {
+        console.error("Error fetching donation details:", err);
+        setError("Failed to load donation details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDonationDetails();
   }, [id]);
 
   if (loading) {
@@ -39,19 +93,30 @@ export default function DonationDetailPage({
       <section className="w-full py-10 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="flex justify-center items-center h-64">
-            <div className="text-xl">Loading...</div>
+            <div className="text-xl animate-pulse">Loading...</div>
           </div>
         </div>
       </section>
     );
   }
 
-  if (!donation) {
+  if (error || !donation) {
     return (
       <section className="w-full py-10 md:py-24">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="mb-6">
+            <Link
+              href="/donation"
+              className="flex items-center text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to donations
+            </Link>
+          </div>
           <div className="flex justify-center items-center h-64">
-            <div className="text-xl">Donation not found</div>
+            <div className="text-xl text-red-500">
+              {error || "Donation not found"}
+            </div>
           </div>
         </div>
       </section>

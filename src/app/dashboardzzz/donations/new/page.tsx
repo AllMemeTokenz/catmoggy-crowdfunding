@@ -91,10 +91,10 @@ export default function NewDonation() {
 
       await axios.post("/api/funding-projects", formData);
 
-      toast.success("Project created successfully");
+      toast.success("Berhasil Membuat Donasi Baru");
 
       // Navigate back to the donations dashboard
-      router.push("/dashboard/donations");
+      router.push("/dashboardzzz/donations");
     } catch (error) {
       console.error("Error creating project:", error);
 
@@ -127,7 +127,7 @@ export default function NewDonation() {
     <div className="space-y-6">
       <div className="mb-6">
         <Link
-          href="/dashboard/donations"
+          href="/dashboardzzz/donations"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
