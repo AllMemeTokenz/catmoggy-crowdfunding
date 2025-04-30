@@ -1,7 +1,181 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import DonationCard from "@/components/layout/donation-card";
+// import DonationFilter from "@/components/layout/donation-filter";
+// import {
+//   Breadcrumb,
+//   BreadcrumbItem,
+//   BreadcrumbLink,
+//   BreadcrumbList,
+//   BreadcrumbPage,
+//   BreadcrumbSeparator,
+// } from "@/components/ui/breadcrumb";
+
+// // Define the DonationCardData interface directly here
+// interface DonationCardData {
+//   id: string;
+//   imageUrl: string;
+//   category: string;
+//   title: string;
+//   description: string;
+//   raised: string;
+//   percentFunded: number;
+//   badgeText?: string;
+
+// }
+
+// // Calculate percentage helper function
+// const calculatePercentage = (current: number, target: number) => {
+//   if (target === 0) return 0;
+//   return Math.min(Math.round((current / target) * 100), 100);
+// };
+
+// // app/donation/page.tsx
+// export default function DonationPage() {
+//   const [donations, setDonations] = useState<DonationCardData[]>([]);
+//   const [filteredDonations, setFilteredDonations] = useState<
+//     DonationCardData[]
+//   >([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     const fetchDonations = async () => {
+//       try {
+//         const response = await axios.get("/api/funding-projects");
+
+//         // Log the response to see its structure
+//         console.log("API Response:", response.data);
+
+//         // Check if response.data is an array or if it's nested in another property
+//         let donationsArray = [];
+
+//         if (Array.isArray(response.data)) {
+//           // If response.data is already an array
+//           donationsArray = response.data;
+//         } else if (response.data && typeof response.data === "object") {
+//           // If response.data is an object, try to find an array property
+//           // Common patterns include response.data.data, response.data.items, response.data.results, etc.
+//           const possibleArrayProps = [
+//             "data",
+//             "items",
+//             "results",
+//             "donations",
+//             "projects",
+//             "fundingProjects",
+//           ];
+
+//           for (const prop of possibleArrayProps) {
+//             if (Array.isArray(response.data[prop])) {
+//               donationsArray = response.data[prop];
+//               break;
+//             }
+//           }
+
+//           // If we still don't have an array, check if the object has keys that might be an array of items
+//           if (
+//             donationsArray.length === 0 &&
+//             Object.keys(response.data).length > 0
+//           ) {
+//             // Convert object to array if it seems like an object of objects
+//             donationsArray = Object.values(response.data);
+//           }
+//         }
+
+//         if (!Array.isArray(donationsArray)) {
+//           throw new Error("Could not extract donation data from API response");
+//         }
+
+//         const donationsData = donationsArray.map((item: any) => ({
+//           id: item._id || item.id,
+//           imageUrl: item.imageUrl,
+//           category: item.category,
+//           title: item.title,
+//           description: item.description,
+//           raised: `$${item.currentFunding}`,
+//           percentFunded: calculatePercentage(
+//             item.currentFunding,
+//             item.targetFunding
+//           ),
+//           badgeText: item.statusLabel,
+//         }));
+
+//         setDonations(donationsData);
+//         setFilteredDonations(donationsData);
+//       } catch (err) {
+//         console.error("Error fetching donations:", err);
+//         setError(
+//           "Failed to load donations. Please check the console for details."
+//         );
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchDonations();
+//   }, []);
+
+//   return (
+//     <section className="w-full py-10 md:py-24">
+//       <div className="mx-auto max-w-7xl px-4 md:px-6">
+//         <Breadcrumb>
+//           <BreadcrumbList>
+//             <BreadcrumbItem>
+//               <BreadcrumbLink href="/">Home</BreadcrumbLink>
+//             </BreadcrumbItem>
+//             <BreadcrumbSeparator />
+//             <BreadcrumbItem>
+//               <BreadcrumbPage>Donation</BreadcrumbPage>
+//             </BreadcrumbItem>
+//           </BreadcrumbList>
+//         </Breadcrumb>
+//         <h1 className="text-3xl font-bold mt-6 mb-8">Featured Donations</h1>
+
+//         {loading ? (
+//           <div className="flex justify-center py-12">
+//             <div className="animate-pulse text-xl">Loading donations...</div>
+//           </div>
+//         ) : error ? (
+//           <div className="text-center py-12 text-red-500">
+//             <p className="text-lg">{error}</p>
+//           </div>
+//         ) : (
+//           <>
+//             {/* Search and Filter Component */}
+//             <DonationFilter
+//               donations={donations}
+//               onFilterChange={setFilteredDonations}
+//             />
+
+//             {/* Donation Cards Grid */}
+//             {filteredDonations.length > 0 ? (
+//               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+//                 {filteredDonations.map((donation) => (
+//                   <DonationCard key={donation.id} {...donation} />
+//                 ))}
+//               </div>
+//             ) : (
+//               <div className="text-center py-12">
+//                 <p className="text-lg text-gray-600">
+//                   No donations match your search criteria.
+//                 </p>
+//               </div>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </section>
+//   );
+// }
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import DonationCard from "@/components/layout/donation-card";
+import DonationFilter from "@/components/layout/donation-filter";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,13 +184,89 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import DonationFilter from "@/components/layout/donation-filter";
-import { featuredDonations, type DonationCardData } from "@/app/data/site-data";
+import { DonationCardData, ApiDonationItem } from "@/types/types"; // impor tipe
 
-// app/donation/page.tsx
+const calculatePercentage = (current: number, target: number) => {
+  if (target === 0) return 0;
+  return Math.min(Math.round((current / target) * 100), 100);
+};
+
 export default function DonationPage() {
-  const [filteredDonations, setFilteredDonations] =
-    useState<DonationCardData[]>(featuredDonations);
+  const [donations, setDonations] = useState<DonationCardData[]>([]);
+  const [filteredDonations, setFilteredDonations] = useState<
+    DonationCardData[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDonations = async () => {
+      try {
+        const response = await axios.get("/api/funding-projects");
+
+        let donationsArray: ApiDonationItem[] = [];
+
+        if (Array.isArray(response.data)) {
+          donationsArray = response.data;
+        } else if (response.data && typeof response.data === "object") {
+          const possibleArrayProps = [
+            "data",
+            "items",
+            "results",
+            "donations",
+            "projects",
+            "fundingProjects",
+          ];
+
+          for (const prop of possibleArrayProps) {
+            if (Array.isArray(response.data[prop])) {
+              donationsArray = response.data[prop];
+              break;
+            }
+          }
+
+          if (
+            donationsArray.length === 0 &&
+            Object.keys(response.data).length > 0
+          ) {
+            donationsArray = Object.values(response.data);
+          }
+        }
+
+        if (!Array.isArray(donationsArray)) {
+          throw new Error("Could not extract donation data from API response");
+        }
+
+        const donationsData: DonationCardData[] = donationsArray.map(
+          (item) => ({
+            id: item._id || item.id || "",
+            imageUrl: item.imageUrl || "",
+            category: item.category || "",
+            title: item.title || "",
+            description: item.description || "",
+            raised: `$${item.currentFunding ?? 0}`,
+            percentFunded: calculatePercentage(
+              item.currentFunding ?? 0,
+              item.targetFunding ?? 0
+            ),
+            badgeText: item.statusLabel || "",
+          })
+        );
+
+        setDonations(donationsData);
+        setFilteredDonations(donationsData);
+      } catch (err) {
+        console.error("Error fetching donations:", err);
+        setError(
+          "Failed to load donations. Please check the console for details."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDonations();
+  }, []);
 
   return (
     <section className="w-full py-10 md:py-24">
@@ -34,25 +284,35 @@ export default function DonationPage() {
         </Breadcrumb>
         <h1 className="text-3xl font-bold mt-6 mb-8">Featured Donations</h1>
 
-        {/* Search and Filter Component */}
-        <DonationFilter
-          donations={featuredDonations}
-          onFilterChange={setFilteredDonations}
-        />
-
-        {/* Donation Cards Grid */}
-        {filteredDonations.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {filteredDonations.map((donation) => (
-              <DonationCard key={donation.id} {...donation} />
-            ))}
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-pulse text-xl">Loading donations...</div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12 text-red-500">
+            <p className="text-lg">{error}</p>
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-600">
-              No donations match your search criteria.
-            </p>
-          </div>
+          <>
+            <DonationFilter
+              donations={donations}
+              onFilterChange={setFilteredDonations}
+            />
+
+            {filteredDonations.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {filteredDonations.map((donation) => (
+                  <DonationCard key={donation.id} {...donation} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-lg text-gray-600">
+                  No donations match your search criteria.
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

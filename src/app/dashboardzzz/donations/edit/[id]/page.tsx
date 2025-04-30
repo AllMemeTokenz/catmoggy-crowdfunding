@@ -6,6 +6,8 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +21,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { featuredDonations, type DonationCardData } from "@/app/data/site-data";
 import Image from "next/image";
 
 export default function EditDonation({
@@ -27,13 +28,12 @@ export default function EditDonation({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // Unwrap the params Promise using React.use()
   const unwrappedParams = use(params);
   const { id } = unwrappedParams;
 
   const router = useRouter();
 
-  const [formData, setFormData] = useState<DonationCardData>({
+  const [formData, setFormData] = useState({
     id: "",
     imageUrl: "",
     category: "",
@@ -50,22 +50,59 @@ export default function EditDonation({
   const [imgSrc, setImgSrc] = useState("/placeholder.svg");
 
   useEffect(() => {
-    // Find the donation with the matching ID
-    const donation = featuredDonations.find((d) => d.id === id);
+    const fetchDonationById = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:3000/api/funding-projects/${id}`
+        );
+        const apiData = response.data.data || response.data;
 
-    if (donation) {
-      setFormData(donation);
-      if (donation.imageUrl) {
-        setImgSrc(donation.imageUrl);
+        setFormData({
+          id: apiData._id || apiData.id || id,
+          imageUrl: apiData.imageUrl || "",
+          category: apiData.category || "",
+          title: apiData.title || "",
+          description: apiData.description || "",
+          raised: `$${apiData.currentFunding || 0}`,
+          goal: `$${apiData.targetFunding || 0}`,
+          percentFunded: apiData.targetFunding
+            ? Math.min(
+                Math.round(
+                  ((apiData.currentFunding || 0) / apiData.targetFunding) * 100
+                ),
+                100
+              )
+            : 0,
+          badgeText: apiData.statusLabel || apiData.badgeText || "",
+        });
+
+        if (apiData.imageUrl) {
+          setImgSrc(apiData.imageUrl);
+        } else {
+          setImgSrc("/placeholder.svg");
+        }
+      } catch (error) {
+        console.error("Error fetching donation data:", error);
+        // Biarkan formData kosong agar user bisa isi manual
+        setFormData({
+          id: "",
+          imageUrl: "",
+          category: "",
+          title: "",
+          description: "",
+          raised: "",
+          goal: "",
+          percentFunded: 0,
+          badgeText: "",
+        });
+        setImgSrc("/placeholder.svg");
+      } finally {
+        setLoading(false);
       }
-    } else {
-      // Handle case where donation is not found
-      console.error("Donation not found");
-      // Optionally redirect to the donations list
-      // router.push("/dashboard/donations");
-    }
+    };
 
-    setLoading(false);
+    fetchDonationById();
   }, [id]);
 
   const handleChange = (
@@ -77,19 +114,36 @@ export default function EditDonation({
       [name]: value,
     }));
 
-    // Update image source when imageUrl changes
     if (name === "imageUrl" && value) {
       setImgSrc(value);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically update the data in your database
-    console.log("Form submitted:", formData);
+    try {
+      // Persiapkan data yang akan dikirim, hapus simbol $ pada nilai uang
+      const payload = {
+        imageUrl: formData.imageUrl,
+        category: formData.category,
+        title: formData.title,
+        description: formData.description,
+        currentFunding: Number(formData.raised.replace(/[^0-9.-]+/g, "")),
+        targetFunding: Number(formData.goal.replace(/[^0-9.-]+/g, "")),
+        percentFunded: formData.percentFunded,
+        badgeText: formData.badgeText,
+      };
 
-    // Navigate back to the donations dashboard
-    router.push("/dashboard/donations");
+      await axios.patch(
+        `http://localhost:3000/api/funding-projects/${id}`,
+        payload
+      );
+      toast.success("Update Data Donasi Berhasil");
+      router.push("/dashboardzzz/donations");
+    } catch (error) {
+      console.error("Failed to update donation:", error);
+      toast.error("Update Data Donasi Gagal");
+    }
   };
 
   if (loading) {
@@ -104,9 +158,10 @@ export default function EditDonation({
 
   return (
     <div className="space-y-6">
+      <Toaster />
       <div className="mb-6">
         <Link
-          href="/dashboard/donations"
+          href="/dashboardzzz/donations"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />

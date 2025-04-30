@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <ul className="space-y-2">
             <li>
               <Link
-                href="/dashboard"
+                href="/dashboardzzz"
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 <LayoutDashboard className="h-5 w-5 text-gray-500" />
@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </li>
             <li>
               <Link
-                href="/dashboard/donations"
+                href="/dashboardzzz/donations"
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 <Heart className="h-5 w-5 text-gray-500" />
@@ -38,7 +38,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </li>
             <li>
               <Link
-                href="/dashboard/users"
+                href="/dashboardzzz/users"
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 <Users className="h-5 w-5 text-gray-500" />
@@ -47,7 +47,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </li>
             <li>
               <Link
-                href="/dashboard/settings"
+                href="/dashboardzzz/settings"
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 <Settings className="h-5 w-5 text-gray-500" />
