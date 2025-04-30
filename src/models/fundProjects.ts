@@ -32,6 +32,11 @@ const projectSchema = new Schema<IProject>(
     category: { type: String, required: true },
     imageUrl: { type: String, required: true },
     expiredDate: { type: Date, required: true },
+    currency: {
+      type: String,
+      enum: ['catmoggy', 'sol'],
+      default: 'catmoggy',
+    },
     targetFunding: { type: Number, required: true, min: [1, 'Target funding must be greater than 0.'] },
     currentFunding: { type: Number, required: true, default: 0 },
     description: { type: String, required: true },

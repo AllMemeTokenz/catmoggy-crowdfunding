@@ -48,6 +48,7 @@ Fetch all funding projects in the system.
 
 - **message**: A success message confirming that the funding projects were retrieved successfully.
 - **data**: An array of all the funding projects in the system, where each object contains:
+
   - **\_id**: The unique ID for the project.
   - **title**: The title of the project.
   - **subTitle**: The subtitle of the project.
@@ -59,6 +60,17 @@ Fetch all funding projects in the system.
   - **currentFunding**: The current funding raised for the project.
   - **createdAt**: The timestamp when the project was created.
   - **updatedAt**: The timestamp when the project was last updated.
+
+  ### Error Response : `No projects found`
+
+  - **Status Code**: `404 Not Found`
+  - **Content**:
+
+  ```json
+  {
+    "error": "No projects found"
+  }
+  ```
 
 ### Error Response
 
