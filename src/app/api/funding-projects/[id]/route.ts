@@ -1,12 +1,12 @@
 import { connectDB } from '@/lib/connectDB';
 import { FundProject } from '@/models/fundProjects';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Types } from 'mongoose';
 import * as v from 'valibot';
 import { updateProjectSchema } from '@/validations/projectUpdateValidation';
 import { isDeepStrictEqual } from 'node:util';
 
-export const GET = async (req: Request, { params }: { params: { id: string } }) => {
+export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     await connectDB();
 
@@ -29,7 +29,7 @@ export const GET = async (req: Request, { params }: { params: { id: string } }) 
   }
 };
 
-export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     const body = await req.json();
     const { id } = await params;

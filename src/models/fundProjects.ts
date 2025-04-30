@@ -14,6 +14,7 @@ const donationSchema = new Schema<IDonation>(
   {
     donor: { type: String, required: true },
     amount: { type: Number, required: true },
+    receipt: { type: String, required: true },
     currency: {
       type: String,
       enum: ['catmoggy', 'sol'],

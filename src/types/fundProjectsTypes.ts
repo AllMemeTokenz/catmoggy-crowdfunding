@@ -9,7 +9,8 @@ export interface IComment {
 export interface IDonation {
   donor: string;
   amount: number;
-  currency: "catmoggy" | "sol";
+  receipt: string;
+  currency: 'catmoggy' | 'sol';
   date: Date;
 }
 
