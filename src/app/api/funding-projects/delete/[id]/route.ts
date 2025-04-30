@@ -1,8 +1,8 @@
 import { connectDB } from '@/lib/connectDB';
 import { FundProject } from '@/models/fundProjects';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const PATCH = async (req: Request, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
     await connectDB();
 
