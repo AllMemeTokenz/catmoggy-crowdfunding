@@ -36,7 +36,7 @@ export default function ScrollToTop() {
         <Button
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          className="fixed bottom-10 right-10 z-50 p-3"
+          className="fixed bottom-10 right-10 z-50 p-3 cursor-pointer"
         >
           <ArrowUp size={24} />
         </Button>

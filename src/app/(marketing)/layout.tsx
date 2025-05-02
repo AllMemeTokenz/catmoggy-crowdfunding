@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/layout/navbar"; // Navbar khusus untuk marketing
 import Footer from "@/components/layout/footer";
 import "./globals.css"; // Styling khusus marketing
+import ScrollToTop from "@/components/layout/scroll-to-top";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,10 @@ export default function MarketingLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
+
         {children}
+        <ScrollToTop />
+
         <Footer />
       </body>
     </html>

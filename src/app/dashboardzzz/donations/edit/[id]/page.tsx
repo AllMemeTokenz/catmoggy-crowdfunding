@@ -283,6 +283,9 @@ export default function EditDonation({
             <div className="space-y-4">
               <div>
                 <Label htmlFor="raised">Raised Amount</Label>
+                <span className="ml-2 text-xs font-med text-zinc-400 italic">
+                  *(read-only, cannot be changed)
+                </span>
                 <Input
                   id="raised"
                   name="raised"
@@ -290,6 +293,7 @@ export default function EditDonation({
                   onChange={handleChange}
                   placeholder="E.g., $1,000"
                   required
+                  disabled
                 />
               </div>
 
@@ -307,6 +311,9 @@ export default function EditDonation({
 
               <div>
                 <Label htmlFor="percentFunded">Percent Funded</Label>
+                <span className="ml-2 text-xs font-med text-zinc-400 italic">
+                  *(read-only, cannot be changed)
+                </span>
                 <Input
                   id="percentFunded"
                   name="percentFunded"
@@ -317,6 +324,7 @@ export default function EditDonation({
                   onChange={handleChange}
                   placeholder="E.g., 25"
                   required
+                  disabled
                 />
               </div>
             </div>

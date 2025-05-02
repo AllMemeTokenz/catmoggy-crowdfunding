@@ -22,7 +22,6 @@ export default function ContactPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        
       </div>
     </section>
   );

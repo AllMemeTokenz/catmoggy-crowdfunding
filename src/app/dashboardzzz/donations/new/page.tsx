@@ -18,6 +18,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import axios from "axios";
@@ -37,6 +47,7 @@ export default function NewDonation() {
       .split("T")[0],
     targetFunding: 0,
     description: "",
+    currency: "catmoggy",
   });
 
   // For preview display
@@ -80,6 +91,13 @@ export default function NewDonation() {
         }));
       }
     }
+  };
+
+  const handleCurrencyChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      currency: value,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -276,6 +294,26 @@ export default function NewDonation() {
               </div>
 
               <div>
+                <Label htmlFor="currency">Currency *</Label>
+
+                <Select
+                  value={formData.currency}
+                  onValueChange={handleCurrencyChange}
+                >
+                  <SelectTrigger className="w-full bg-transparent">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Currency</SelectLabel>
+                      <SelectItem value="catmoggy">Catmoggy</SelectItem>
+                      <SelectItem value="sol">Sol</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="mt-4">
                 <Label htmlFor="targetFunding">Target Funding Amount *</Label>
                 <Input
                   id="targetFunding"

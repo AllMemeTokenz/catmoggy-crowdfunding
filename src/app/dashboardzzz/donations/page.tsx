@@ -42,6 +42,18 @@ export default function DonationsDashboard() {
     fetchDonations();
   }, []);
 
+  // const handleDelete = async (id: string) => {
+  //   try {
+  //     await axios.patch(`/api/funding-projects/delete/${id}`);
+  //     setDonations((prev) =>
+  //       prev.filter((donation) => (donation._id || donation.id) !== id)
+  //     );
+  //     toast.success("Data Donasi Berhasil Dihapus!");
+  //   } catch (error) {
+  //     console.error("Failed to delete donation:", error);
+  //     toast.error("Data Donasi Gagal Dihapus! Silakan coba lagi.");
+  //   }
+  // };
   const handleDelete = async (id: string) => {
     try {
       await axios.patch(`/api/funding-projects/delete/${id}`);
@@ -50,7 +62,11 @@ export default function DonationsDashboard() {
       );
       toast.success("Data Donasi Berhasil Dihapus!");
     } catch (error) {
-      console.error("Failed to delete donation:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Error response:", error.response);
+      } else {
+        console.error(error);
+      }
       toast.error("Data Donasi Gagal Dihapus! Silakan coba lagi.");
     }
   };

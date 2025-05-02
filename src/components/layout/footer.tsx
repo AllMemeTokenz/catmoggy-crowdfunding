@@ -17,7 +17,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label={`Visit our ${link.name} page`}
             >
-              <Button size="icon">
+              <Button size="icon" className="cursor-pointer">
                 <link.logo size={18} />
               </Button>
             </a>

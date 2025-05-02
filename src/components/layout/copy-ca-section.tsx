@@ -13,10 +13,10 @@ export default function TokenCopySection({
     navigator.clipboard
       .writeText(tokenCA)
       .then(() => {
-        toast.success("Copied to clipboard");
+        toast.success("CA successfully copied to clipboard");
       })
       .catch(() => {
-        toast.error("Could not copy");
+        toast.error("Could not copied to clipboard.");
       });
   };
 
@@ -30,7 +30,9 @@ export default function TokenCopySection({
           </h3>
           <div className="w-full max-w-3xl font-semibold flex flex-col sm:flex-row items-center justify-between text-center sm:space-x-5 space-y-3 sm:space-y-0 relative px-6 border border-black shadow-[4px_4px_0_#483f3b] transition-all ease-linear duration-100 py-3 rounded-sm bg-blue-50">
             <span className="break-all sm:break-normal">{tokenCA}</span>
-            <Button onClick={handleCopy}>COPY</Button>
+            <Button onClick={handleCopy} className="cursor-pointer">
+              COPY
+            </Button>
           </div>
         </div>
       </div>
