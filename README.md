@@ -77,6 +77,26 @@ This section provides detailed documentation of the available API endpoints. Cli
 
 ---
 
+### [ POST Funding Donation](./docs/post-funding-donation.md)
+
+**HTTP Method:** POST
+
+**Description:** Add funding donation by funding project ID.
+
+**Endpoint:** `/api/funding-projects/donations/[id]`
+
+---
+
+### [ GET Funding Donations By Project ID](./docs/get-funding-donations.md)
+
+**HTTP Method:** GET
+
+**Description:** Get all funding donations by funding project ID.
+
+**Endpoint:** `/api/funding-projects/donations/[id]`
+
+---
+
 ### Learn More
 
 To learn more about Next.js, take a look at the following resources:

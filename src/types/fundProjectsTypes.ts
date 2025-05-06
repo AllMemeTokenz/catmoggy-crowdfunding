@@ -1,16 +1,8 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
 export interface IComment {
   user: string;
   comment: string;
-  date: Date;
-}
-
-export interface IDonation {
-  donor: string;
-  amount: number;
-  receipt: string;
-  currency: 'catmoggy' | 'sol';
   date: Date;
 }
 
@@ -26,7 +18,6 @@ export interface IProject extends Document {
   currentFunding: number;
   description: string;
   comments: IComment[];
-  donations: IDonation[];
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
