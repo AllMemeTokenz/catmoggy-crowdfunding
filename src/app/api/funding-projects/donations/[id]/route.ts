@@ -33,7 +33,7 @@ export const POST = async (req: NextRequest, { params }: { params: Promise<{ id:
 
     const createNewDonation = await Donation.create(newDonation);
 
-    return NextResponse.json(createNewDonation);
+    return NextResponse.json({ message: 'Donation added successfully', data: createNewDonation }, { status: 201 });
   } catch (error) {
     console.error('Error creating donation:', error);
     return NextResponse.json({ error: 'Internal server error', detail: (error as Error).message }, { status: 500 });

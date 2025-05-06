@@ -5,7 +5,6 @@ export interface IDonation {
   amount: number;
   receipt: string;
   currency: 'catmoggy' | 'sol';
-  date: Date;
   project: {
     id: Types.ObjectId;
     title: string;

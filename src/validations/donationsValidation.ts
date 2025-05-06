@@ -8,5 +8,4 @@ export const newDonationVal = strictObject({
   amount: pipe(number(), minValue(1, 'Amount must be greater than 0.')),
   receipt: pipe(string(), minLength(1, 'Receipt is required.')),
   currency: currencyEnum,
-  date: pipe(string(), minLength(1, 'Date is required.')),
 });
