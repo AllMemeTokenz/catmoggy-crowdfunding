@@ -9,3 +9,7 @@ export const newDonationVal = strictObject({
   receipt: pipe(string(), minLength(1, 'Receipt is required.')),
   currency: currencyEnum,
 });
+
+export const delDonationVal = strictObject({
+  deleteComment: pipe(string(), minLength(1, 'Delete comment is required.')),
+});

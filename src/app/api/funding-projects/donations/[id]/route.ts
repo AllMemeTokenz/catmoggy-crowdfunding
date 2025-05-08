@@ -1,3 +1,4 @@
+import { connectDB } from '@/lib/connectDB';
 import { Donation } from '@/models/donations';
 import { FundProject } from '@/models/fundProjects';
 import { newDonationVal } from '@/validations/donationsValidation';
@@ -14,6 +15,7 @@ export const POST = async (req: NextRequest, { params }: { params: Promise<{ id:
       return new Response(JSON.stringify({ error: 'Invalid ID' }), { status: 400 });
     }
 
+    await connectDB();
     // check if the project exists and is not deleted
     const project = await FundProject.findOne({ _id: id, deletedAt: null }).select('-deletedAt -__v');
     if (!project) {
@@ -46,6 +48,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: 
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
     }
+    await connectDB();
     const project = await FundProject.findOne({ _id: id, deletedAt: null }).select('-deletedAt -__v');
     if (!project) {
       return NextResponse.json({ error: 'Project not found' }, { status: 400 });
@@ -54,7 +57,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: 
     const donations = await Donation.find({
       'project.id': new Types.ObjectId(id),
       deletedAt: null,
-    });
+    }).select('-deletedAt -deleteComment -__v');
 
     return NextResponse.json(donations);
   } catch (error) {
