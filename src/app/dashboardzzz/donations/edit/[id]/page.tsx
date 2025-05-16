@@ -1,102 +1,84 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import axios from "axios";
-import { toast, Toaster } from "react-hot-toast";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
+import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import axios from 'axios';
+import { toast, Toaster } from 'react-hot-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import Image from 'next/image';
 
-export default function EditDonation({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function EditDonation({ params }: { params: Promise<{ id: string }> }) {
   const unwrappedParams = use(params);
   const { id } = unwrappedParams;
 
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    id: "",
-    imageUrl: "",
-    category: "",
-    title: "",
-    description: "",
-    raised: "",
-    goal: "",
+    id: '',
+    imageUrl: '',
+    category: '',
+    title: '',
+    description: '',
+    raised: '',
+    goal: '',
     percentFunded: 0,
-    badgeText: "",
+    badgeText: '',
   });
 
   const [previewMode, setPreviewMode] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [imgSrc, setImgSrc] = useState("/placeholder.svg");
+  const [imgSrc, setImgSrc] = useState('/placeholder.svg');
 
   useEffect(() => {
     const fetchDonationById = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          `http://localhost:3000/api/funding-projects/${id}`
-        );
+        const response = await axios.get(`http://localhost:3000/api/admin/funding-projects/${id}`);
         const apiData = response.data.data || response.data;
 
         setFormData({
           id: apiData._id || apiData.id || id,
-          imageUrl: apiData.imageUrl || "",
-          category: apiData.category || "",
-          title: apiData.title || "",
-          description: apiData.description || "",
+          imageUrl: apiData.imageUrl || '',
+          category: apiData.category || '',
+          title: apiData.title || '',
+          description: apiData.description || '',
           raised: `$${apiData.currentFunding || 0}`,
           goal: `$${apiData.targetFunding || 0}`,
           percentFunded: apiData.targetFunding
-            ? Math.min(
-                Math.round(
-                  ((apiData.currentFunding || 0) / apiData.targetFunding) * 100
-                ),
-                100
-              )
+            ? Math.min(Math.round(((apiData.currentFunding || 0) / apiData.targetFunding) * 100), 100)
             : 0,
-          badgeText: apiData.statusLabel || apiData.badgeText || "",
+          badgeText: apiData.statusLabel || apiData.badgeText || '',
         });
 
         if (apiData.imageUrl) {
           setImgSrc(apiData.imageUrl);
         } else {
-          setImgSrc("/placeholder.svg");
+          setImgSrc('/placeholder.svg');
         }
       } catch (error) {
-        console.error("Error fetching donation data:", error);
+        console.error('Error fetching donation data:', error);
         // Biarkan formData kosong agar user bisa isi manual
         setFormData({
-          id: "",
-          imageUrl: "",
-          category: "",
-          title: "",
-          description: "",
-          raised: "",
-          goal: "",
+          id: '',
+          imageUrl: '',
+          category: '',
+          title: '',
+          description: '',
+          raised: '',
+          goal: '',
           percentFunded: 0,
-          badgeText: "",
+          badgeText: '',
         });
-        setImgSrc("/placeholder.svg");
+        setImgSrc('/placeholder.svg');
       } finally {
         setLoading(false);
       }
@@ -105,16 +87,14 @@ export default function EditDonation({
     fetchDonationById();
   }, [id]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    if (name === "imageUrl" && value) {
+    if (name === 'imageUrl' && value) {
       setImgSrc(value);
     }
   };
@@ -128,21 +108,18 @@ export default function EditDonation({
         category: formData.category,
         title: formData.title,
         description: formData.description,
-        currentFunding: Number(formData.raised.replace(/[^0-9.-]+/g, "")),
-        targetFunding: Number(formData.goal.replace(/[^0-9.-]+/g, "")),
+        currentFunding: Number(formData.raised.replace(/[^0-9.-]+/g, '')),
+        targetFunding: Number(formData.goal.replace(/[^0-9.-]+/g, '')),
         percentFunded: formData.percentFunded,
         badgeText: formData.badgeText,
       };
 
-      await axios.patch(
-        `http://localhost:3000/api/funding-projects/${id}`,
-        payload
-      );
-      toast.success("Update Data Donasi Berhasil");
-      router.push("/dashboardzzz/donations");
+      await axios.patch(`http://localhost:3000/api/funding-projects/${id}`, payload);
+      toast.success('Update Data Donasi Berhasil');
+      router.push('/dashboardzzz/donations');
     } catch (error) {
-      console.error("Failed to update donation:", error);
-      toast.error("Update Data Donasi Gagal");
+      console.error('Failed to update donation:', error);
+      toast.error('Update Data Donasi Gagal');
     }
   };
 
@@ -160,10 +137,7 @@ export default function EditDonation({
     <div className="space-y-6">
       <Toaster />
       <div className="mb-6">
-        <Link
-          href="/dashboardzzz/donations"
-          className="flex items-center text-gray-600 hover:text-gray-900"
-        >
+        <Link href="/dashboardzzz/donations" className="flex items-center text-gray-600 hover:text-gray-900">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to donations
         </Link>
@@ -171,9 +145,7 @@ export default function EditDonation({
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Edit Donation</h1>
-        <Button onClick={() => setPreviewMode(!previewMode)}>
-          {previewMode ? "Edit Mode" : "Preview Mode"}
-        </Button>
+        <Button onClick={() => setPreviewMode(!previewMode)}>{previewMode ? 'Edit Mode' : 'Preview Mode'}</Button>
       </div>
 
       {previewMode ? (
@@ -183,14 +155,12 @@ export default function EditDonation({
               {formData.imageUrl && (
                 <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
                   <Image
-                    src={imgSrc || "/placeholder.svg"}
+                    src={imgSrc || '/placeholder.svg'}
                     alt={formData.title}
                     width={400}
                     height={200}
                     className="w-full h-full object-cover"
-                    onError={() =>
-                      setImgSrc("/placeholder.svg?height=200&width=400")
-                    }
+                    onError={() => setImgSrc('/placeholder.svg?height=200&width=400')}
                   />
                 </div>
               )}
@@ -204,24 +174,18 @@ export default function EditDonation({
                   {formData.badgeText}
                 </div>
               )}
-              <CardTitle>{formData.title || "Donation Title"}</CardTitle>
-              <CardDescription>
-                {formData.category || "Category"}
-              </CardDescription>
+              <CardTitle>{formData.title || 'Donation Title'}</CardTitle>
+              <CardDescription>{formData.category || 'Category'}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500 mb-4">
-                {formData.description || "Donation description goes here"}
-              </p>
+              <p className="text-sm text-gray-500 mb-4">{formData.description || 'Donation description goes here'}</p>
               <div className="space-y-2">
                 <Progress value={formData.percentFunded} className="h-2" />
                 <div className="flex justify-between text-sm">
                   <span>{formData.raised}</span>
                   <span>raised of {formData.goal}</span>
                 </div>
-                <div className="text-sm text-gray-500">
-                  {formData.percentFunded}% funded
-                </div>
+                <div className="text-sm text-gray-500">{formData.percentFunded}% funded</div>
               </div>
             </CardContent>
             <CardFooter>
@@ -273,7 +237,7 @@ export default function EditDonation({
                 <Input
                   id="badgeText"
                   name="badgeText"
-                  value={formData.badgeText || ""}
+                  value={formData.badgeText || ''}
                   onChange={handleChange}
                   placeholder="E.g., Featured, Urgent, etc."
                 />
@@ -283,9 +247,7 @@ export default function EditDonation({
             <div className="space-y-4">
               <div>
                 <Label htmlFor="raised">Raised Amount</Label>
-                <span className="ml-2 text-xs font-med text-zinc-400 italic">
-                  *(read-only, cannot be changed)
-                </span>
+                <span className="ml-2 text-xs font-med text-zinc-400 italic">*(read-only, cannot be changed)</span>
                 <Input
                   id="raised"
                   name="raised"
@@ -311,9 +273,7 @@ export default function EditDonation({
 
               <div>
                 <Label htmlFor="percentFunded">Percent Funded</Label>
-                <span className="ml-2 text-xs font-med text-zinc-400 italic">
-                  *(read-only, cannot be changed)
-                </span>
+                <span className="ml-2 text-xs font-med text-zinc-400 italic">*(read-only, cannot be changed)</span>
                 <Input
                   id="percentFunded"
                   name="percentFunded"
@@ -345,10 +305,7 @@ export default function EditDonation({
 
           <div className="flex gap-4">
             <Button type="submit">Update Donation</Button>
-            <Button
-              type="button"
-              onClick={() => router.push("/dashboard/donations")}
-            >
+            <Button type="button" onClick={() => router.push('/dashboard/donations')}>
               Cancel
             </Button>
           </div>

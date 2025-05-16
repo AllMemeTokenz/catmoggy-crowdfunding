@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'react-hot-toast';
+import formatNumber from '@/utils/formatNumber';
 
 type Donation = {
   _id?: string;
@@ -15,6 +16,7 @@ type Donation = {
   category?: string;
   currentFunding?: number;
   targetFunding?: number;
+  currency?: string;
   // properti lain sesuai kebutuhan
 };
 
@@ -27,7 +29,7 @@ export default function DonationsDashboard() {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/funding-projects');
+        const response = await axios.get('/api/admin/funding-projects');
         setLoading(false);
         const data = response.data.data || response.data;
         setDonations(data);
@@ -42,7 +44,7 @@ export default function DonationsDashboard() {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.patch(`/api/funding-projects/delete/${id}`);
+      await axios.patch(`/api/admin/funding-projects/delete/${id}`);
       setDonations((prev) => prev.filter((donation) => (donation._id || donation.id) !== id));
       toast.success('Data Donasi Berhasil Dihapus!');
     } catch (error) {
@@ -86,7 +88,7 @@ export default function DonationsDashboard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[80px]">ID</TableHead>
+                <TableHead className="w-[80px]">#</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Raised</TableHead>
@@ -96,13 +98,13 @@ export default function DonationsDashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {donations.map((donation) => (
+              {donations.map((donation, index) => (
                 <TableRow key={donation._id || donation.id}>
-                  <TableCell className="font-medium">{(donation._id || donation.id)?.slice(0, 8)}</TableCell>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell>{donation.title || 'Untitled'}</TableCell>
                   <TableCell>{donation.category || 'Uncategorized'}</TableCell>
-                  <TableCell>${donation.currentFunding || 0}</TableCell>
-                  <TableCell>${donation.targetFunding || 0}</TableCell>
+                  <TableCell>{`${donation.currentFunding || 0} ${donation.currency}`}</TableCell>
+                  <TableCell>{`${formatNumber(donation.targetFunding || 0)} ${donation.currency}`}</TableCell>
                   <TableCell>
                     {donation.targetFunding
                       ? Math.min(Math.round(((donation.currentFunding || 0) / donation.targetFunding) * 100), 100)

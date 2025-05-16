@@ -1,23 +1,16 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -26,46 +19,42 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { Progress } from '@/components/ui/progress';
+import Image from 'next/image';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function NewDonation() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    subTitle: "",
-    statusLabel: "Active",
-    category: "",
-    imageUrl: "",
-    expiredDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
+    title: '',
+    subTitle: '',
+    statusLabel: 'Active',
+    category: '',
+    imageUrl: '',
+    expiredDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     targetFunding: 0,
-    description: "",
-    currency: "catmoggy",
+    description: '',
+    currency: 'catmoggy',
   });
 
   // For preview display
   const [previewData, setPreviewData] = useState({
-    raised: "$0",
-    goal: "$0",
+    raised: '$0',
+    goal: '$0',
     percentFunded: 0,
-    badgeText: "",
+    badgeText: '',
   });
 
   const [previewMode, setPreviewMode] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
-    if (name === "targetFunding") {
+    if (name === 'targetFunding') {
       // Convert string to number for targetFunding
       setFormData((prev) => ({
         ...prev,
@@ -84,7 +73,7 @@ export default function NewDonation() {
       }));
 
       // Update preview data for specific fields
-      if (name === "statusLabel") {
+      if (name === 'statusLabel') {
         setPreviewData((prev) => ({
           ...prev,
           badgeText: value,
@@ -107,21 +96,18 @@ export default function NewDonation() {
     try {
       // Send data to the API endpoint
 
-      await axios.post("/api/funding-projects", formData);
+      await axios.post('/api/admin/funding-projects', formData);
 
-      toast.success("Berhasil Membuat Donasi Baru");
+      toast.success('Berhasil Membuat Donasi Baru');
 
       // Navigate back to the donations dashboard
-      router.push("/dashboardzzz/donations");
+      router.push('/dashboardzzz/donations');
     } catch (error) {
-      console.error("Error creating project:", error);
+      console.error('Error creating project:', error);
 
-      let errorMessage = "Failed to create project";
+      let errorMessage = 'Failed to create project';
       if (axios.isAxiosError(error) && error.response) {
-        errorMessage =
-          error.response.data.detail ||
-          error.response.data.error ||
-          errorMessage;
+        errorMessage = error.response.data.detail || error.response.data.error || errorMessage;
       }
 
       toast.error(errorMessage);
@@ -130,24 +116,21 @@ export default function NewDonation() {
     }
   };
 
-  const [imgSrc, setImgSrc] = useState("/placeholder.svg?height=200&width=400");
+  const [imgSrc, setImgSrc] = useState('/placeholder.svg?height=200&width=400');
 
   // Update image preview when URL changes
   const updateImagePreview = () => {
     if (formData.imageUrl) {
       setImgSrc(formData.imageUrl);
     } else {
-      setImgSrc("/placeholder.svg?height=200&width=400");
+      setImgSrc('/placeholder.svg?height=200&width=400');
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="mb-6">
-        <Link
-          href="/dashboardzzz/donations"
-          className="flex items-center text-gray-600 hover:text-gray-900"
-        >
+        <Link href="/dashboardzzz/donations" className="flex items-center text-gray-600 hover:text-gray-900">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to donations
         </Link>
@@ -161,7 +144,7 @@ export default function NewDonation() {
             setPreviewMode(!previewMode);
           }}
         >
-          {previewMode ? "Edit Mode" : "Preview Mode"}
+          {previewMode ? 'Edit Mode' : 'Preview Mode'}
         </Button>
       </div>
 
@@ -171,14 +154,12 @@ export default function NewDonation() {
             <CardHeader className="relative">
               <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
                 <Image
-                  src={imgSrc || "/placeholder.svg"}
+                  src={imgSrc || '/placeholder.svg'}
                   alt={formData.title}
                   width={400}
                   height={200}
                   className="w-full h-full object-cover"
-                  onError={() =>
-                    setImgSrc("/placeholder.svg?height=200&width=400")
-                  }
+                  onError={() => setImgSrc('/placeholder.svg?height=200&width=400')}
                 />
               </div>
               {formData.statusLabel && (
@@ -186,25 +167,20 @@ export default function NewDonation() {
                   {formData.statusLabel}
                 </div>
               )}
-              <CardTitle>{formData.title || "Project Title"}</CardTitle>
+              <CardTitle>{formData.title || 'Project Title'}</CardTitle>
               <CardDescription>
-                {formData.category || "Category"} •{" "}
-                {formData.subTitle || "Subtitle"}
+                {formData.category || 'Category'} • {formData.subTitle || 'Subtitle'}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500 mb-4">
-                {formData.description || "Project description goes here"}
-              </p>
+              <p className="text-sm text-gray-500 mb-4">{formData.description || 'Project description goes here'}</p>
               <div className="space-y-2">
                 <Progress value={previewData.percentFunded} className="h-2" />
                 <div className="flex justify-between text-sm">
                   <span>{previewData.raised}</span>
                   <span>raised of ${formData.targetFunding}</span>
                 </div>
-                <div className="text-sm text-gray-500">
-                  {previewData.percentFunded}% funded
-                </div>
+                <div className="text-sm text-gray-500">{previewData.percentFunded}% funded</div>
                 <div className="text-sm text-gray-500">
                   Expires: {new Date(formData.expiredDate).toLocaleDateString()}
                 </div>
@@ -296,10 +272,7 @@ export default function NewDonation() {
               <div>
                 <Label htmlFor="currency">Currency *</Label>
 
-                <Select
-                  value={formData.currency}
-                  onValueChange={handleCurrencyChange}
-                >
+                <Select value={formData.currency} onValueChange={handleCurrencyChange}>
                   <SelectTrigger className="w-full bg-transparent">
                     <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
@@ -344,13 +317,9 @@ export default function NewDonation() {
 
           <div className="flex gap-4">
             <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save Project"}
+              {loading ? 'Saving...' : 'Save Project'}
             </Button>
-            <Button
-              type="button"
-              onClick={() => router.push("/dashboard/donations")}
-              disabled={loading}
-            >
+            <Button type="button" onClick={() => router.push('/dashboard/donations')} disabled={loading}>
               Cancel
             </Button>
           </div>
