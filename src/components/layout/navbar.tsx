@@ -121,7 +121,9 @@ export default function Navbar() {
             <Wallet className="h-4 w-4" />
             <span>Connect Wallet</span>
           </Button>
-          <Button>Login</Button>
+          <Link href="/login">
+            <Button>Login</Button>
+          </Link>
         </div>
 
         {/* Mobile menu */}
