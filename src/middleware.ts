@@ -6,21 +6,28 @@ export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     const token = req.nextauth.token;
 
+    const isApiRoute = req.nextUrl.pathname.startsWith('/api');
+
+    if (isApiRoute && !token) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+
     const isAdminRoute = req.nextUrl.pathname.startsWith('/dashboardzzz');
 
     if (isAdminRoute && token?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/admin-login', req.url));
+      return NextResponse.redirect(new URL('/login', req.url));
     }
 
     return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      authorized: ({ token }) => true, // We'll handle auth logic ourselves
     },
   }
 );
 
 export const config = {
-  matcher: ['/dashboardzzz/:path*'],
+  matcher: ['/api/:path*', '/dashboardzzz/:path*'],
 };
