@@ -34,7 +34,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 <Heart className="h-5 w-5 text-gray-500" />
-                Donations
+                Funding Projects
               </Link>
             </li>
             <li>
