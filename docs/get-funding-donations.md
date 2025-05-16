@@ -25,8 +25,6 @@ Fetch all funding projects donations by the funding project ID.
     "amount": 600000,
     "receipt": "pospospospos",
     "currency": "catmoggy",
-    "deletedAt": null,
-    "deleteComment": null,
     "createdAt": "2025-05-06T04:11:58.227Z",
     "updatedAt": "2025-05-06T04:11:58.227Z",
     "__v": 0
@@ -41,8 +39,6 @@ Fetch all funding projects donations by the funding project ID.
     "amount": 800000,
     "receipt": "oaijsdfpoaimsdcoim",
     "currency": "catmoggy",
-    "deletedAt": null,
-    "deleteComment": null,
     "createdAt": "2025-05-06T04:14:22.986Z",
     "updatedAt": "2025-05-06T04:14:22.986Z",
     "__v": 0

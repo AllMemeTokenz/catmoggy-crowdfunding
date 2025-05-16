@@ -36,6 +36,8 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id
 
     const validatedData = v.parse(updateProjectSchema, body);
 
+    await connectDB();
+
     const project = await FundProject.findById(id).select('-deletedAt -__v -comments -donations -currentFunding');
 
     if (!project) {

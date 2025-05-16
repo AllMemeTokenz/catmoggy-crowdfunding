@@ -33,10 +33,6 @@ export const GET = async () => {
 
     console.log('Fetched projects:', projects);
 
-    if (!projects || projects.length === 0) {
-      return NextResponse.json({ error: 'No projects found' }, { status: 404 });
-    }
-
     return NextResponse.json({ message: 'Projects fetched successfully', data: projects }, { status: 200 });
   } catch (error) {
     console.error('Error fetching projects:', error);

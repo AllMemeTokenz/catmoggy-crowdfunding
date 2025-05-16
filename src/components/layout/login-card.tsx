@@ -94,30 +94,25 @@
 //   );
 // }
 
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { loginUser } from "@/app/admin-login/login-data";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+// import { loginUser } from '@/app/login/login-data';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import adminLogin from '@/lib/adminLogin';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
+  const [error, setError] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -125,18 +120,19 @@ export default function LoginPage() {
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const result = await loginUser(formData);
+      const result = await adminLogin(formData);
 
-      if (result.success) {
-        router.push("/dashboardzzz");
+      if (result?.success) {
+        router.push('/dashboardzzz');
       } else {
-        setError(result.error || "Login failed. Please try again.");
+        setError(result?.error || 'Login failed. Please try again.');
       }
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError('An unexpected error occurred. Please try again.');
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
@@ -147,9 +143,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your username and password to access your dashboard
-          </CardDescription>
+          <CardDescription>Enter your username and password to access your dashboard</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
@@ -161,43 +155,24 @@ export default function LoginPage() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  name="username"
-                  placeholder="johndoe"
-                  required
-                />
+                <Input id="username" name="username" required />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
+                  {/* <a href="#" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
                     Forgot your password?
-                  </a>
+                  </a> */}
                 </div>
                 <div className="relative">
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                  />
+                  <Input id="password" name="password" type={showPassword ? 'text' : 'password'} required />
                   <button
                     type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                     onClick={togglePasswordVisibility}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
@@ -209,24 +184,24 @@ export default function LoginPage() {
                       Logging in...
                     </>
                   ) : (
-                    "Login"
+                    'Login'
                   )}
                 </Button>
-                <Button type="button" className="w-full" disabled={isLoading}>
+                {/* <Button type="button" className="w-full" disabled={isLoading}>
                   Login with Google
-                </Button>
+                </Button> */}
               </div>
             </div>
           </form>
         </CardContent>
-        <CardFooter>
+        {/* <CardFooter>
           <div className="w-full text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <a href="#" className="underline underline-offset-4">
               Sign up
             </a>
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   );
