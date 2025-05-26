@@ -2,7 +2,7 @@
 
 import type React from 'react';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -20,33 +20,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import { Progress } from '@/components/ui/progress';
 import Image from 'next/image';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function NewDonation() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    subTitle: '',
-    statusLabel: 'Active',
-    category: '',
-    imageUrl: '',
-    expiredDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    targetFunding: 0,
-    description: '',
-    currency: 'catmoggy',
-  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const formData = new FormData();
 
   // For preview display
   const [previewData, setPreviewData] = useState({
-    raised: '$0',
-    goal: '$0',
-    percentFunded: 0,
-    badgeText: '',
+    title: '',
+    subTitle: '',
+    statusLabel: '',
+    category: '',
+    expiredDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    targetFunding: '',
+    description: '',
+    currency: 'catmoggy',
   });
 
   const [previewMode, setPreviewMode] = useState(false);
@@ -54,39 +49,30 @@ export default function NewDonation() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'targetFunding') {
-      // Convert string to number for targetFunding
-      setFormData((prev) => ({
-        ...prev,
-        [name]: Number.parseFloat(value) || 0,
-      }));
-
-      // Update preview goal
-      setPreviewData((prev) => ({
-        ...prev,
-        goal: `$${value}`,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-
-      // Update preview data for specific fields
-      if (name === 'statusLabel') {
-        setPreviewData((prev) => ({
-          ...prev,
-          badgeText: value,
-        }));
-      }
-    }
+    // Update preview goal
+    setPreviewData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleCurrencyChange = (value: string) => {
-    setFormData((prev) => ({
+  const handleSelectChange = (name: string) => (value: string) => {
+    setPreviewData((prev) => ({
       ...prev,
-      currency: value,
+      [name]: value,
     }));
+  };
+
+  const HandleUploadBtnClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setImgSrc(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -95,13 +81,24 @@ export default function NewDonation() {
 
     try {
       // Send data to the API endpoint
+      for (const key in previewData) {
+        formData.append(key, previewData[key as keyof typeof previewData] as never);
+      }
+      if (selectedFile) {
+        formData.append('file', selectedFile);
+      }
 
-      await axios.post('/api/admin/funding-projects', formData);
+      const res = await axios.post('/api/admin/funding-projects', formData);
+      console.log('Api res:', res);
 
-      toast.success('Berhasil Membuat Donasi Baru');
+      if (res.status !== 201) {
+        throw new Error('Failed to create project, internal server error.');
+      }
 
-      // Navigate back to the donations dashboard
-      router.push('/dashboardzzz/donations');
+      toast.success('Funding project created successfully!');
+      setTimeout(() => {
+        router.push('/dashboardzzz/donations');
+      }, 2000);
     } catch (error) {
       console.error('Error creating project:', error);
 
@@ -116,16 +113,7 @@ export default function NewDonation() {
     }
   };
 
-  const [imgSrc, setImgSrc] = useState('/placeholder.svg?height=200&width=400');
-
-  // Update image preview when URL changes
-  const updateImagePreview = () => {
-    if (formData.imageUrl) {
-      setImgSrc(formData.imageUrl);
-    } else {
-      setImgSrc('/placeholder.svg?height=200&width=400');
-    }
-  };
+  const [imgSrc, setImgSrc] = useState('https://placehold.co/400x200.png?text=Banner+Image');
 
   return (
     <div className="space-y-6">
@@ -140,7 +128,6 @@ export default function NewDonation() {
         <h1 className="text-3xl font-bold">Add New Funding Project</h1>
         <Button
           onClick={() => {
-            updateImagePreview();
             setPreviewMode(!previewMode);
           }}
         >
@@ -154,35 +141,35 @@ export default function NewDonation() {
             <CardHeader className="relative">
               <div className="aspect-video rounded-t-lg overflow-hidden bg-gray-100 mb-2">
                 <Image
-                  src={imgSrc || '/placeholder.svg'}
-                  alt={formData.title}
+                  src={imgSrc}
+                  alt="Banner Image"
                   width={400}
                   height={200}
                   className="w-full h-full object-cover"
                   onError={() => setImgSrc('/placeholder.svg?height=200&width=400')}
                 />
               </div>
-              {formData.statusLabel && (
+              {previewData.statusLabel && (
                 <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-md text-sm font-bold">
-                  {formData.statusLabel}
+                  {previewData.statusLabel}
                 </div>
               )}
-              <CardTitle>{formData.title || 'Project Title'}</CardTitle>
+              <CardTitle>{previewData.title || 'Project Title'}</CardTitle>
               <CardDescription>
-                {formData.category || 'Category'} • {formData.subTitle || 'Subtitle'}
+                {previewData.category || 'Category'} • {previewData.subTitle || 'Subtitle'}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500 mb-4">{formData.description || 'Project description goes here'}</p>
+              <p className="text-sm text-gray-500 mb-4">{previewData.description || 'Project description goes here'}</p>
               <div className="space-y-2">
-                <Progress value={previewData.percentFunded} className="h-2" />
+                <Progress value={0} className="h-2" />
                 <div className="flex justify-between text-sm">
-                  <span>{previewData.raised}</span>
-                  <span>raised of ${formData.targetFunding}</span>
+                  <span>{0}</span> {/* Raised amount*/}
+                  <span> {`raised of ${previewData.targetFunding} ${previewData.currency}`}</span>
                 </div>
-                <div className="text-sm text-gray-500">{previewData.percentFunded}% funded</div>
+                <div className="text-sm text-gray-500">0% funded</div>
                 <div className="text-sm text-gray-500">
-                  Expires: {new Date(formData.expiredDate).toLocaleDateString()}
+                  Expires: {new Date(previewData.expiredDate).toLocaleDateString()}
                 </div>
               </div>
             </CardContent>
@@ -200,7 +187,7 @@ export default function NewDonation() {
                 <Input
                   id="title"
                   name="title"
-                  value={formData.title}
+                  value={previewData.title}
                   onChange={handleChange}
                   placeholder="Enter project title"
                   required
@@ -212,7 +199,7 @@ export default function NewDonation() {
                 <Input
                   id="subTitle"
                   name="subTitle"
-                  value={formData.subTitle}
+                  value={previewData.subTitle}
                   onChange={handleChange}
                   placeholder="Enter subtitle"
                   required
@@ -224,22 +211,29 @@ export default function NewDonation() {
                 <Input
                   id="category"
                   name="category"
-                  value={formData.category}
+                  value={previewData.category}
                   onChange={handleChange}
                   placeholder="Enter category"
                   required
                 />
               </div>
 
-              <div>
-                <Label htmlFor="imageUrl">Image URL *</Label>
-                <Input
-                  id="imageUrl"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleChange}
-                  placeholder="Enter image URL"
-                  required
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="imageUrl">Banner Image *</Label>
+                {selectedFile ? (
+                  <span className="text-sm text-gray-500">{selectedFile.name}</span>
+                ) : (
+                  <span className="text-sm text-gray-500">No file chosen</span>
+                )}
+                <Button type="button" onClick={HandleUploadBtnClick} className="max-w-30">
+                  {selectedFile ? 'Change Image' : 'Upload Image'}
+                </Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImgUpload}
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
                 />
               </div>
             </div>
@@ -250,7 +244,7 @@ export default function NewDonation() {
                 <Input
                   id="statusLabel"
                   name="statusLabel"
-                  value={formData.statusLabel}
+                  value={previewData.statusLabel}
                   onChange={handleChange}
                   placeholder="E.g., Active, Urgent, etc."
                   required
@@ -263,7 +257,7 @@ export default function NewDonation() {
                   id="expiredDate"
                   name="expiredDate"
                   type="date"
-                  value={formData.expiredDate}
+                  value={previewData.expiredDate}
                   onChange={handleChange}
                   required
                 />
@@ -272,7 +266,7 @@ export default function NewDonation() {
               <div>
                 <Label htmlFor="currency">Currency *</Label>
 
-                <Select value={formData.currency} onValueChange={handleCurrencyChange}>
+                <Select onValueChange={handleSelectChange('currency')} name="currency" value={previewData.currency}>
                   <SelectTrigger className="w-full bg-transparent">
                     <SelectValue placeholder="Select currency" />
                   </SelectTrigger>
@@ -293,7 +287,7 @@ export default function NewDonation() {
                   name="targetFunding"
                   type="number"
                   min="1"
-                  value={formData.targetFunding}
+                  value={previewData.targetFunding}
                   onChange={handleChange}
                   placeholder="E.g., 10000"
                   required
@@ -307,7 +301,7 @@ export default function NewDonation() {
             <Textarea
               id="description"
               name="description"
-              value={formData.description}
+              value={previewData.description}
               onChange={handleChange}
               placeholder="Enter project description"
               rows={5}

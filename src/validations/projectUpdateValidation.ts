@@ -10,7 +10,8 @@ export const updateProjectSchema = partial(
     subTitle: pipe(string(), minLength(1, 'SubTitle is required.')),
     statusLabel: pipe(string(), minLength(1, 'StatusLabel is required.')),
     category: pipe(string(), minLength(1, 'Category is required.')),
-    imageUrl: pipe(string(), minLength(1, 'image url is required.')),
+    image: pipe(string(), minLength(1, 'image url is required.')),
+    imageVersion: pipe(string(), minLength(1, 'image version is required.')),
     expiredDate: pipe(string(), minLength(1, 'expired date is required.')),
     targetFunding: pipe(number(), minValue(1, 'Target funding must be greater than 0.')),
   })
