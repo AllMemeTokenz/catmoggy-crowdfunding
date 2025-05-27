@@ -11,7 +11,8 @@ export interface IProject extends Document {
   subTitle: string;
   statusLabel: string;
   category: string;
-  imageUrl: string;
+  image: string;
+  imageVersion: string;
   expiredDate: Date;
   currency: 'catmoggy' | 'sol';
   targetFunding: number;

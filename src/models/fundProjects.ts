@@ -16,7 +16,8 @@ const projectSchema = new Schema<IProject>(
     subTitle: { type: String, required: true },
     statusLabel: { type: String, required: true },
     category: { type: String, required: true },
-    imageUrl: { type: String, required: true },
+    image: { type: String, required: true },
+    imageVersion: { type: String, required: true },
     expiredDate: { type: Date, required: true },
     currency: {
       type: String,
