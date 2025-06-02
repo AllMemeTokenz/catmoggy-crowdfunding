@@ -1,13 +1,20 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Loader, Plus, SearchX } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { toast } from 'react-hot-toast';
-import formatNumber from '@/utils/formatNumber';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Loader, Plus, SearchX } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { toast } from "react-hot-toast";
+import formatNumber from "@/utils/formatNumber";
 
 type Donation = {
   _id?: string;
@@ -29,13 +36,13 @@ export default function DonationsDashboard() {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/admin/funding-projects');
+        const response = await axios.get("/api/admin/funding-projects");
         setLoading(false);
         const data = response.data.data || response.data;
         setDonations(data);
       } catch (error) {
-        console.error('Failed to fetch donations:', error);
-        toast.error('Failed to fetch donations. Please try again later.');
+        console.error("Failed to fetch donations:", error);
+        toast.error("Failed to fetch donations. Please try again later.");
       }
     };
 
@@ -45,15 +52,17 @@ export default function DonationsDashboard() {
   const handleDelete = async (id: string) => {
     try {
       await axios.patch(`/api/admin/funding-projects/delete/${id}`);
-      setDonations((prev) => prev.filter((donation) => (donation._id || donation.id) !== id));
-      toast.success('Data Donasi Berhasil Dihapus!');
+      setDonations((prev) =>
+        prev.filter((donation) => (donation._id || donation.id) !== id)
+      );
+      toast.success("Data Donasi Berhasil Dihapus!");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Error response:', error.response);
+        console.error("Error response:", error.response);
       } else {
         console.error(error);
       }
-      toast.error('Data Donasi Gagal Dihapus! Silakan coba lagi.');
+      toast.error("Data Donasi Gagal Dihapus! Silakan coba lagi.");
     }
   };
 
@@ -80,8 +89,12 @@ export default function DonationsDashboard() {
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
           {/* <Loader className="animate-spin h-5 w-5 text-gray-500 " /> */}
           <SearchX className="h-12 w-12 text-gray-500" />
-          <p className="text-center text-gray-800 mt-2 font-semibold">No data found</p>
-          <p className="text-center text-gray-500">Get started by creating a new funding project.</p>
+          <p className="text-center text-gray-800 mt-2 font-semibold">
+            No data found
+          </p>
+          <p className="text-center text-gray-500">
+            Get started by creating a new funding project.
+          </p>
         </div>
       ) : (
         <div>
@@ -101,19 +114,43 @@ export default function DonationsDashboard() {
               {donations.map((donation, index) => (
                 <TableRow key={donation._id || donation.id}>
                   <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell>{donation.title || 'Untitled'}</TableCell>
-                  <TableCell>{donation.category || 'Uncategorized'}</TableCell>
-                  <TableCell>{`${donation.currentFunding || 0} ${donation.currency}`}</TableCell>
-                  <TableCell>{`${formatNumber(donation.targetFunding || 0)} ${donation.currency}`}</TableCell>
+                  <TableCell>{donation.title || "Untitled"}</TableCell>
+                  <TableCell>{donation.category || "Uncategorized"}</TableCell>
+                  <TableCell>{`${donation.currentFunding || 0} ${
+                    donation.currency
+                  }`}</TableCell>
+                  <TableCell>{`${formatNumber(donation.targetFunding || 0)} ${
+                    donation.currency
+                  }`}</TableCell>
                   <TableCell>
                     {donation.targetFunding
-                      ? Math.min(Math.round(((donation.currentFunding || 0) / donation.targetFunding) * 100), 100)
+                      ? Math.min(
+                          Math.round(
+                            ((donation.currentFunding || 0) /
+                              donation.targetFunding) *
+                              100
+                          ),
+                          100
+                        )
                       : 0}
                     %
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Link href={`/dashboardzzz/donations/edit/${donation._id || donation.id}`}>
+                      <Link
+                        href={`/dashboardzzz/donations/donors/${
+                          donation._id || donation.id
+                        }`}
+                      >
+                        <Button size="sm" className="bg-zinc-100">
+                          Detail Donors
+                        </Button>
+                      </Link>
+                      <Link
+                        href={`/dashboardzzz/donations/edit/${
+                          donation._id || donation.id
+                        }`}
+                      >
                         <Button size="sm" className="bg-amber-500">
                           Edit
                         </Button>

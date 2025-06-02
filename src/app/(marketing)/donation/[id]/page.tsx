@@ -21,6 +21,12 @@ interface DonationData {
   badgeText?: string;
   goal?: string;
 }
+interface DonationRecord {
+  donor: string;
+  amount: number;
+  receipt: string;
+  currency: string;
+}
 
 // Calculate percentage helper function
 const calculatePercentage = (current: number, target: number) => {
@@ -38,6 +44,7 @@ export default function DonationDetailPage({
   const { id } = unwrappedParams;
 
   const [donation, setDonation] = useState<DonationData | null>(null);
+  const [donationRecords, setDonationRecords] = useState<DonationRecord[]>([]);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +83,16 @@ export default function DonationDetailPage({
           setTimeout(() => setProgress(donationData.percentFunded), 500);
         } else {
           setError("Could not find donation details");
+        }
+
+        const donorsResponse = await axios.get(
+          `http://localhost:3000/api/admin/funding-projects/donations/${id}`
+        );
+
+        if (donorsResponse.data && Array.isArray(donorsResponse.data.data)) {
+          setDonationRecords(donorsResponse.data.data);
+        } else {
+          setDonationRecords([]);
         }
       } catch (err) {
         console.error("Error fetching donation details:", err);
@@ -159,8 +176,8 @@ export default function DonationDetailPage({
                 <TabsTrigger value="about" className="flex-1">
                   About
                 </TabsTrigger>
-                <TabsTrigger value="updates" className="flex-1">
-                  Updates
+                <TabsTrigger value="donors" className="flex-1">
+                  Donors
                 </TabsTrigger>
               </TabsList>
 
@@ -198,7 +215,38 @@ export default function DonationDetailPage({
                 </div>
               </TabsContent>
 
-              <TabsContent value="updates" className="space-y-6">
+              <TabsContent value="donors" className="space-y-6">
+                {donationRecords.length === 0 ? (
+                  <p className="text-gray-700">
+                    No donations yet. Be the first to support!
+                  </p>
+                ) : (
+                  donationRecords.map((record, index) => (
+                    <div key={index} className="border-b pb-6">
+                      <div className="flex items-center mb-2">
+                        <div className="bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center mr-3">
+                          <span className="font-bold">
+                            {record.donor.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <h4 className="font-bold">{record.donor}</h4>
+                        </div>
+                      </div>
+                      <h3 className="text-lg font-semibold mb-1">
+                        Donated: {record.currency}
+                        {record.amount.toFixed(2)}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Transaction: {record.receipt.substring(0, 8)}...
+                        {record.receipt.substring(record.receipt.length - 4)}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </TabsContent>
+
+              {/* <TabsContent value="donors" className="space-y-6">
                 <div className="space-y-6">
                   <div className="border-b pb-6">
                     <div className="flex items-center mb-2">
@@ -240,7 +288,7 @@ export default function DonationDetailPage({
                     </p>
                   </div>
                 </div>
-              </TabsContent>
+              </TabsContent> */}
             </Tabs>
           </div>
 
