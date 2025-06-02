@@ -1,10 +1,10 @@
 import LoginCard from '@/components/layout/login-card';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
+import AuthOptions from '@/utils/authOptions';
 import { redirect } from 'next/navigation';
 
 const LoginPage = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(AuthOptions);
   if (session?.user?.role === 'admin') {
     redirect('/dashboardzzz');
   }
