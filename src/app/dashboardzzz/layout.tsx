@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 fixed h-full">
+      <aside className="w-64 bg-white border-r border-gray-200 fixed h-full z-50">
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold">CatMoggy Admin</h2>
         </div>

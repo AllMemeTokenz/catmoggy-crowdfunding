@@ -6,7 +6,7 @@ export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     const token = req.nextauth.token;
 
-    const isApiRoute = req.nextUrl.pathname.startsWith('/api');
+    const isApiRoute = req.nextUrl.pathname.startsWith('/api/admin');
 
     if (isApiRoute && !token) {
       return new NextResponse('Unauthorized', { status: 401 });

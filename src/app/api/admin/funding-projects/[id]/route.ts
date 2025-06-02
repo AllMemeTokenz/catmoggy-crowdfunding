@@ -5,6 +5,7 @@ import { Types } from 'mongoose';
 import * as v from 'valibot';
 import { updateProjectSchema } from '@/validations/projectUpdateValidation';
 import { isDeepStrictEqual } from 'node:util';
+import cloudinaryImageHandler from '@/lib/cloudinaryImageHandler';
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
@@ -31,12 +32,13 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: 
 
 export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
-    const body = await req.json();
-    const { id } = await params;
-
-    const validatedData = v.parse(updateProjectSchema, body);
-
     await connectDB();
+    const formData = await req.formData();
+    const { id } = await params;
+    const file = formData.get('file') as Blob | null;
+    let isSame = true;
+    let updateFile = false;
+    let imageVersion = '';
 
     const project = await FundProject.findById(id).select('-deletedAt -__v -comments -donations -currentFunding');
 
@@ -44,12 +46,69 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    const isSame = Object.entries(validatedData).every(([key, value]) => {
-      return isDeepStrictEqual(value, project.get(key));
-    });
+    console.log('is file available : ', file);
+    if (file !== null && file instanceof Blob) {
+      updateFile = true;
+      const res = await cloudinaryImageHandler('UPDATE', file, project.image);
+      console.log('Cloudinary response:', res);
+      imageVersion = res.version.toString();
+    }
 
-    if (isSame) {
-      return NextResponse.json({ message: 'No changes detected.', changed: false }, { status: 200 });
+    const data = {
+      title: formData.get('title') as string | null,
+      subTitle: formData.get('subTitle') as string | null,
+      description: formData.get('description') as string | null,
+      statusLabel: formData.get('statusLabel') as string | null,
+      category: formData.get('category') as string | null,
+      expiredDate: formData.get('expiredDate') as string | null,
+      targetFunding: formData.get('targetFunding') ? Number(formData.get('targetFunding')) : null,
+      currency: formData.get('currency') as string | null,
+      image: project.image,
+      imageVersion: imageVersion,
+    };
+
+    const validatedData = v.parse(updateProjectSchema, data);
+
+    if (updateFile === false) {
+      console.log('RUNNING REQUEST CHECK, IS UPDATE OR NOT');
+
+      const projectObj = project.toObject();
+
+      for (const [key, value] of formData.entries()) {
+        if (key === 'targetFunding') {
+          console.log(key);
+          const check = isDeepStrictEqual(Number(value), projectObj[key]);
+          console.log('check : ', check);
+          if (!check) {
+            isSame = false;
+            break;
+          }
+        } else if (key === 'expiredDate') {
+          console.log(key);
+          const check = new Date(value as string).toISOString() === new Date(projectObj[key]).toISOString();
+          console.log('check : ', check);
+          if (!check) {
+            isSame = false;
+            break;
+          }
+        } else if (key === 'file') {
+          console.log('file key, skipping');
+          continue;
+        } else {
+          console.log(key);
+          const check = isDeepStrictEqual(value, projectObj[key]);
+          console.log('check : ', check);
+          if (!check) {
+            isSame = false;
+            break;
+          }
+        }
+      }
+
+      console.log('isSame : ', isSame);
+      if (isSame) {
+        return NextResponse.json({ message: 'No changes detected.', changed: false }, { status: 200 });
+      }
     }
 
     Object.assign(project, validatedData);
