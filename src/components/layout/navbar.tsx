@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Link from "next/link";
-import { Menu, Wallet, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import * as React from 'react';
+import Link from 'next/link';
+import { Menu, Wallet, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
+} from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -29,8 +29,8 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Tutup menu jika klik di luar
@@ -48,31 +48,29 @@ export default function Navbar() {
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full border-b-3 border-black transition-all duration-300",
-        isScrolled ? "bg-white/50 backdrop-blur-sm shadow-md" : "bg-white"
+        'sticky top-0 z-50 w-full border-b-3 border-black transition-all duration-300',
+        isScrolled ? 'bg-white/50 backdrop-blur-sm shadow-md' : 'bg-white'
       )}
     >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
-            <Image
-              src="/catmoggy-logo.svg"
-              alt="logo"
-              width={180}
-              height={100}
-            />
+            <div style={{ position: 'relative', width: '120px', height: '40px' }}>
+              <Image src="/catmoggy-logo.svg" alt="Catmoggy Logo" fill style={{ objectFit: 'contain' }} />
+            </div>
+            {/* <Image src="/catmoggy-logo.svg" alt="logo" width={180} height={100} className="h-auto" priority /> */}
           </Link>
         </div>
 
@@ -92,19 +90,19 @@ export default function Navbar() {
           <NavigationMenu>
             <NavigationMenuList className="space-x-2">
               {[
-                { title: "Home", href: "/" },
-                { title: "Donation", href: "/donation" },
-                { title: "About", href: "/about" },
-                { title: "Contact", href: "/contact" },
+                { title: 'Home', href: '/' },
+                { title: 'Donation', href: '/donation' },
+                { title: 'About', href: '/about' },
+                { title: 'Contact', href: '/contact' },
               ].map((item) => (
                 <NavigationMenuItem key={item.title}>
                   <NavigationMenuLink
                     href={item.href}
                     className={cn(
-                      "px-4 py-2 text-sm transition-colors",
+                      'px-4 py-2 text-sm transition-colors',
                       pathname === item.href
-                        ? "font-bold text-blue-500"
-                        : "text-black hover:font-bold hover:text-blue-500"
+                        ? 'font-bold text-blue-500'
+                        : 'text-black hover:font-bold hover:text-blue-500'
                     )}
                   >
                     {item.title}
@@ -117,13 +115,13 @@ export default function Navbar() {
 
         {/* Right buttons */}
         <div className="flex items-center space-x-2">
-          <Button className="hidden md:flex md:items-center md:gap-2">
+          {/* <Button className="hidden md:flex md:items-center md:gap-2">
             <Wallet className="h-4 w-4" />
             <span>Connect Wallet</span>
           </Button>
           <Link href="/login">
             <Button>Login</Button>
-          </Link>
+          </Link> */}
         </div>
 
         {/* Mobile menu */}
@@ -134,19 +132,19 @@ export default function Navbar() {
           >
             <nav className="flex flex-col space-y-2">
               {[
-                { title: "Home", href: "/" },
-                { title: "Donation", href: "/donation" },
-                { title: "About", href: "/about" },
-                { title: "Contact", href: "/contact" },
+                { title: 'Home', href: '/' },
+                { title: 'Donation', href: '/donation' },
+                { title: 'About', href: '/about' },
+                { title: 'Contact', href: '/contact' },
               ].map((item) => (
                 <Link
                   key={item.title}
                   href={item.href}
                   className={cn(
-                    "border-b-2 border-black bg-white px-4 py-2 font-medium text-black transition-all",
+                    'border-b-2 border-black bg-white px-4 py-2 font-medium text-black transition-all',
                     pathname === item.href
-                      ? "font-bold text-blue-500"
-                      : "text-black hover:font-bold hover:text-blue-500"
+                      ? 'font-bold text-blue-500'
+                      : 'text-black hover:font-bold hover:text-blue-500'
                   )}
                 >
                   {item.title}

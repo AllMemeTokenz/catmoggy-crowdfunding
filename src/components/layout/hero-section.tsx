@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, CircleCheck } from "lucide-react";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
-import { supportersData } from "@/app/data/site-data"; // Updated import
+import { Button } from '@/components/ui/button';
+import { ArrowRight, CircleCheck } from 'lucide-react';
+import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
+import { supportersData } from '@/app/data/site-data'; // Updated import
 
 export default function HeroSection() {
   return (
@@ -14,21 +14,18 @@ export default function HeroSection() {
         <div className="flex flex-col justify-center space-y-6">
           <Badge>
             <CircleCheck />
-            <span className="font-semibold">
-              First Platform Crowdfunding Cats in the World on Web3
-            </span>
+            <span className="font-semibold">First Platform Crowdfunding Cats in the World on Web3</span>
           </Badge>
           <h1 className="text-4xl font-extrabold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
-            Every Paw Deserves{" "}
-            <span className="text-blue-500">Love & Care</span>
+            Every Paw Deserves <span className="text-blue-500">Love & Care</span>
           </h1>
 
           <p className="max-w-[600px] text-lg text-zinc-700 md:text-xl">
-            Join our mission to rescue, rehabilitate, and rehome cats in need.
-            Your support makes a difference in their lives.
+            Join our mission to rescue, rehabilitate, and rehome cats in need. Your support makes a difference in their
+            lives.
           </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex gap-4">
             <Link href="/donation" className="block w-fit">
               <Button className="cw-full cursor-pointer">Donate Now</Button>
             </Link>
@@ -44,14 +41,8 @@ export default function HeroSection() {
           <div className="flex items-center gap-4 pt-4">
             <div className="flex -space-x-4">
               {supportersData.map((person, i) => (
-                <Avatar
-                  key={i}
-                  className="h-12 w-12 border-black bg-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                >
-                  <AvatarImage
-                    src={person.image || "/placeholder.svg"}
-                    alt={person.name}
-                  />
+                <Avatar key={i} className="h-12 w-12 border-black bg-blue-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <AvatarImage src={person.image || '/placeholder.svg'} alt={person.name} />
                   <AvatarFallback className="bg-blue-500 text-black font-bold">
                     {person.name.substring(0, 2).toUpperCase()}
                   </AvatarFallback>
