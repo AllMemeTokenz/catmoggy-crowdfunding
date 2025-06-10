@@ -2,7 +2,8 @@
 export interface ApiDonationItem {
   _id?: string;
   id?: string;
-  imageUrl?: string;
+  image?: string;
+  imageVersion?: string;
   category?: string;
   title?: string;
   description?: string;
@@ -13,7 +14,8 @@ export interface ApiDonationItem {
 
 export interface DonationCardData {
   id: string;
-  imageUrl?: string;
+  image?: string;
+  imageVersion?: string;
   category?: string;
   title?: string;
   description?: string;
